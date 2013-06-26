@@ -1,5 +1,4 @@
-A program that calculates the minimum energy structure of a classical harmonic lattice.
-Elastic properties can be calculated through deformations of the cell dimensions (no UI yet)
+A program that generates a list of bonds for input into a LAMMPS calculation
 
 Requirements:
 GSL must be installed
