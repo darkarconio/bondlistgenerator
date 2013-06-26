@@ -41,39 +41,8 @@ int main (int argc, char* argv[])
    param = unitCellParam;
    multiplyCell(atomList, cellMultiply, unitCellParam, param);
    connectAtoms(atomList, exBond, param);
-   //defines parameters for optimization
-   double k = 1;
- //  k = 5.229e-4; 
-   param.k(k);
-   unitCellParam.k(k);
-   double potential;
-   double stepSize = .01;
-   double tolerance = 1e-10;
-   Point strainFactor(1,1,1);
-   Point shearFactor(0,0,0);
 
-   //Shifts Atoms off Minimum
-/*   double num = atomList[2].getPos('x');
-   atomList[2].setPos( num+.1, 'x');
-   
-   potential = energy(atomList, param, stepSize, tolerance);
-   cout << potential << endl;
-*/   
-   for (double i=.9996; i<1.0005; i+=.0002)
-   {
-      strainParam = param;
-      strainFactor.setAll(i);
-      strainParam.strain(strainFactor, shearFactor);
-      potential = energy(atomList, strainParam, stepSize, tolerance);
-      cout << strainParam.volume() << ' ' << potential << endl;
-   }
-   
-/*      strainParam = param;
-      strainFactor.setAll(.996);
-      strainParam.strain(strainFactor, shearFactor);
-      potential = energy(atomList, strainParam, stepSize, tolerance);
-      */
-   outputAtoms(atomList, inputFile, strainParam, potential);
+   outputAtoms(atomList, inputFile, param, potential);
 
    return 0;
 }
