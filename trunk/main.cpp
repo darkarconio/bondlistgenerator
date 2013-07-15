@@ -10,6 +10,8 @@
 #include <atom.hpp>
 #include <point.hpp>
 #include <fxn.hpp>
+#include <bond.hpp>
+#include <interaction.hpp>
 
 #define debug(x) cout << __LINE__ << ' ' << x << endl; cout.flush();
 
@@ -18,14 +20,14 @@ using namespace std;
 void readAtoms(vector<Atom>&, string, Parameters&);
 void multiplyCell(vector<Atom>&, Point&, Parameters&, Parameters&);
 void connectAtoms(vector<Atom>&, int, Parameters&);
-void outputAtoms(vector<Atom>&, string, Parameters&, double);
+void outputAtoms(vector<Atom>&, string, Parameters&);
 
 int mod(int, int); 
 double degRad(double);
 double pi();
 
 void changeAtomParam(vector<Atom>&, Parameters&);
-double energy (vector<Atom>&, Parameters&, double, double);
+//double energy (vector<Atom>&, Parameters&, double, double);
 
 int main (int argc, char* argv[])
 {
@@ -41,13 +43,15 @@ int main (int argc, char* argv[])
    param = unitCellParam;
    multiplyCell(atomList, cellMultiply, unitCellParam, param);
    connectAtoms(atomList, exBond, param);
+//   param.delRandBond(atomList);
+   param.genBondList(atomList);
 
-   outputAtoms(atomList, inputFile, param, potential);
+   outputAtoms(atomList, inputFile, param);
 
    return 0;
 }
 
-double energy (vector<Atom>& atomList, Parameters& param, double stepSize, double tolerance)
+/*double energy (vector<Atom>& atomList, Parameters& param, double stepSize, double tolerance)
 {
    double potential;
    int i;
@@ -59,7 +63,6 @@ double energy (vector<Atom>& atomList, Parameters& param, double stepSize, doubl
 
    param.genBondList(atomList);
 
-//     debug(atomList[5].getPos().distance())
    potential = optimizer(positions, param, stepSize, tolerance);
    for (i=0; i<param.pnt(); i++)
    {
@@ -67,7 +70,7 @@ double energy (vector<Atom>& atomList, Parameters& param, double stepSize, doubl
    }
 
    return potential;
-}
+}*/
 
 int mod(int x, int m) 
 {
@@ -197,26 +200,46 @@ void connectAtoms(vector<Atom> & atoms, int target, Parameters & p)
    }
 }
 
-void outputAtoms(vector<Atom> & atoms, string fileName, Parameters & p, double potential)
+void outputAtoms(vector<Atom> & atoms, string fileName, Parameters & p)
 {
    int i;
    fstream file ( (fileName.append(".out")).c_str(), fstream::in | fstream::out | fstream::trunc);
    
-   file << "CRYSTAL\n" << "PRIMVEC\n";
-   
-   for (i=0;i<3;i++)
-      file << (p.dim(i)).x() << " " << (p.dim(i)).y() << " " << (p.dim(i)).z() << "\n";
+   file << fileName << endl << endl;
 
-   file << "PRIMCOORD\n" << p.pnt() << " 1\n";
+   file << p.pnt() << " atoms" << endl;
+   file << p.pnt()*p.cxn()/2 << " bonds" << endl; //does not support deleting bonds
+   file << "0 angles" << endl;
+   file << "0 dihedrals" << endl;
+   file << "0 impropers" << endl << endl;
+
+   file << "1 atom types" << endl;
+   file << "1 bond types" << endl;
+   file << "0 angle types" << endl;
+   file << "0 dihedral types" << endl;
+   file << "0 improper types" << endl << endl;
    
+   file << "0 " << p.dim(0).x() << " xlo xhi" << endl;
+   file << "0 " << p.dim(1).y() << " ylo yhi" << endl;
+   file << "0 " << p.dim(2).z() << " zlo zhi" << endl;
+   file << p.dim(1).x() << ' ' << p.dim(2).x() << ' ' << p.dim(2).y() << " xy xz yz" << endl << endl;
+
+   file << "Atoms" << endl << endl;
+
    for (i=0;i<p.pnt();i++)
    {
-      file << "6 " << atoms[i].getPos('x') << " " << atoms[i].getPos('y') << " " << atoms[i].getPos('z') 
-      << ' ' << atoms[i].getNeighbourIndex(0) << ' ' <<atoms[i].getNeighbourIndex(1) << ' '
-      << atoms[i].getNeighbourIndex(2) << ' ' <<atoms[i].getNeighbourIndex(3) << '\n';
+      file << i+1 << " 1 1 " << atoms[i].getPos('x') << " " << atoms[i].getPos('y') << " " 
+           << atoms[i].getPos('z') << endl;
+   }
+   
+   file << endl << "Bonds" << endl << endl;
+   
+   for (i=0;i<p.bonds().size();i++)
+   {
+      Bond outBond = p.bonds().get();
+      file << i+1 << " 1 " << outBond.index(0) << ' ' << outBond.index(1) << endl;
    }
 
-   cout  << potential << "\n";
    file.close();
 }
 

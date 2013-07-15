@@ -25,3 +25,8 @@ bool Bond::operator< (const Bond & other) const
    return a < other.a || ( b < other.b && a == other.a );
 }
 
+int Bond::index(int i) const 
+{
+   if (i==0) return a->getIndex();
+   return b->getIndex(); 
+}

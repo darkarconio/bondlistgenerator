@@ -14,6 +14,7 @@ class Bond
       Bond (Atom*, Atom*);
       bool operator== (const Bond&) const;
       bool operator< (const Bond&) const;
+      int index(int) const;
 };
 
 #endif

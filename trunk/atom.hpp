@@ -4,6 +4,7 @@
 #include <point.hpp>
 #include <matrix3.hpp>
 #include <fxn.hpp>
+#include <vector>
 
 class Parameters;
 
@@ -12,9 +13,7 @@ class Atom
    private:
       int atomIndex;
       Point pos; //position relative to cellInfo->dim()
-      static const int sNeighbourCount=6;
-      Atom *neighbours[sNeighbourCount];
-      int neighbourCount;
+      std::vector<Atom*> neighbours;
       void copy(const Atom&);
       Parameters *cellInfo; //vectors defining cell Atom is found in
    public:
@@ -30,7 +29,8 @@ class Atom
       void delRandNeighbour();
       void setIndex(int);
       void setParam(Parameters*);
-
+      
+      int getNumNeigh() const {return neighbours.size();}
       double getPos(char) const;
       double getPos(int) const;
       Point getPos() const;
@@ -40,6 +40,9 @@ class Atom
       int getIndex() const;
       int getNeighbourIndex(int) const;
       Atom& operator=(const Atom& other) {copy(other); return *this;}
+      bool operator==(const Atom& other) const {return atomIndex == other.atomIndex;}
+      bool operator<(const Atom& other) const {return atomIndex < other.atomIndex;}
+      bool operator>(const Atom& other) const {return !(*this < other || *this == other);}
 };
 
 #endif

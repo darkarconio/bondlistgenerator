@@ -4,11 +4,15 @@
 #include <matrix.hpp>
 #include <matrix3.hpp>
 #include <vector>
+#include <string>
 #include <point.hpp>
 #include <atom.hpp>
 #include <cmath>
+#include <bond.hpp>
+#include <interaction.hpp>
 
 class Atom;
+class Bond;
 
 //All info needed about the function
 class Parameters
@@ -20,7 +24,7 @@ class Parameters
       Matrix3 mdim; //matrix of the cell vectors
       Point mlen; //The length of each cell vector
       double mdist; //Optimal bond distance
-      std::vector<int> mpairs; //List of bonds
+      Interaction mbonds; //List of bonds
       double mk; //Elastic constant, k
       void copy (const Parameters&);
    public:
@@ -31,7 +35,7 @@ class Parameters
       int cxn () const {return mcxn;}
       double dist () const {return mdist;}
       Point len () const {return mlen;}
-      const std::vector<int>& pairs () {return mpairs;}
+      Interaction& bonds () {return mbonds;}
       Point dim (int n) const {return mdim.getPoint(n);}
       const Matrix3& dim () const {return mdim;}
       double volume() const {return fabs( mdim.tripleProduct() );}
@@ -44,6 +48,7 @@ class Parameters
       void setDim (Point pt, int n) {mdim.setPoint(pt,n); mlen.setCoord(pt.distance(), n);}
       void setDim (const Matrix3&);
       void genBondList (std::vector<Atom>&);
+      void delRandBond(std::vector<Atom>&);
 
       Parameters& operator= (const Parameters& other) {copy(other); return *this;}
       void strain (const Point&);

@@ -1,14 +1,19 @@
 #include <iostream>
 #include <gsl/gsl_multimin.h>
 #include <vector>
+#include <string>
 #include <point.hpp>
 #include <fxn.hpp>
 #include <atom.hpp>
+#include <bond.hpp>
+#include <interaction.hpp>
+#include <set>
+#include <ctime>
 
 using namespace std;
 
 #define debug(x) cout << __LINE__ << ' ' << x << endl; cout.flush();
-
+/*
 //The value of f, f(x, y, ...)
 double my_f (const gsl_vector *v, void *params)
 {
@@ -35,7 +40,7 @@ double my_f (const gsl_vector *v, void *params)
    return fxn;
 }
 
-/* The gradient of f, df = (df/dx, df/dy). */
+// The gradient of f, df = (df/dx, df/dy).
 void my_df (const gsl_vector *v, void *params, gsl_vector *df)
 {
    Point a,b;
@@ -81,7 +86,7 @@ void my_df (const gsl_vector *v, void *params, gsl_vector *df)
    }
 }
 
-/* Compute both f and df together. */
+// Compute both f and df together.
 void my_fdf (const gsl_vector *x, void *params, double *f, gsl_vector *df)
 {
    *f = my_f(x, params);
@@ -101,13 +106,13 @@ double optimizer(vector<Point> & pos, Parameters & p, double stepSize, double to
    gsl_vector *x;
    gsl_multimin_function_fdf my_func;
    
-   my_func.n = p.var();  /* number of function components */
+   my_func.n = p.var();  // number of function components 
    my_func.f = &my_f;
    my_func.df = &my_df;
    my_func.fdf = &my_fdf;
    my_func.params = (void *)&p;
    
-   /* Starting point, x = (5,7) */
+   // Starting point, x = (5,7) 
    x = gsl_vector_alloc (p.var());
   
    for (i=0; i<p.var(); i+=3)
@@ -158,7 +163,7 @@ double optimizer(vector<Point> & pos, Parameters & p, double stepSize, double to
   
 //  debug((s->f)/16); 
    return s->f;
-}
+}*/
 
 //Checks if two Points are bonded across cell walls, returns the corrected vector difference between them if they are
 //Otherwise, simply returns the difference between them
@@ -214,18 +219,30 @@ Point Parameters::checkPeriodBound (Point & c)
    }
    return c;
 }
-
+   
 void Parameters::genBondList(vector<Atom> & atoms)
 {
-   for (int i=0; i<mpnt; i++)
+   int i,j;
+
+   for (i=0;i<mpnt;i++)
    {
-      for (int j=0; j<mcxn; j++)
+      for (j=0;j<atoms[i].getNumNeigh();j++)
       {
-         mpairs.resize(mpnt*2*mcxn);
-         mpairs[(i*mcxn*2)+(j*2)] = atoms[i].getIndex();
-         mpairs[(i*mcxn*2)+(j*2)+1] = atoms[i].getNeighbourIndex(j);
+         mbonds.add(Bond(&atoms[i], atoms[i].getNeighbour(j) ) );
       }
    }
+}
+
+void Parameters::delRandBond(vector<Atom> & atoms)
+{
+   srand ( time(NULL) );
+   int num = rand() % atoms.size();
+   if (atoms[num].getNumNeigh() > 2) 
+   {
+      atoms[num].delRandNeighbour();
+      genBondList(atoms);
+   }
+   else delRandBond(atoms);
 }
 
 Parameters::Parameters()
@@ -234,7 +251,6 @@ Parameters::Parameters()
    mvar = 0;
    mdist = 1;
    mcxn = 0;
-   mpairs = vector<int>();
    mk = 1;
 }
 
@@ -243,7 +259,7 @@ void Parameters::copy(const Parameters & other)
    pnt(other.mpnt);
    mcxn = other.mcxn;
    mdist = other.mdist;
-   mpairs = other.mpairs;
+   mbonds = other.mbonds;
    mdim = other.mdim;
    mlen = other.mlen;
    mk = other.mk;

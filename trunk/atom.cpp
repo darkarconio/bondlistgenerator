@@ -5,17 +5,14 @@
 #include <matrix3.hpp>
 #include <minexcept.hpp>
 #include <iostream>
+#include <vector>
+
 #define debug(x) std::cout << __LINE__ << ' ' << x << std::endl; std::cout.flush();
 
 Atom::Atom (Parameters *info)
 {
    pos.setAll(0);
    cellInfo = info;
-   for (int i=0; i<sNeighbourCount; i++)
-   {
-      neighbours[i] = this;
-   }
-   neighbourCount = 0;
 }
 
 Atom::Atom(const Point& target, int index, Parameters* info)
@@ -23,30 +20,14 @@ Atom::Atom(const Point& target, int index, Parameters* info)
    cellInfo = info;
    setPos(target);
    atomIndex = index;
-   for (int i=0; i<sNeighbourCount; i++)
-   {
-      neighbours[i] = this;
-   }
-   neighbourCount = 0;
 }
       
 void Atom::copy (const Atom& target)
 {  
    cellInfo = target.cellInfo;
-   for (int i=0; i<sNeighbourCount; i++)
-   {
-      if (target.neighbours[i] == &target) 
-      {
-          neighbours[i] = this;
-      }
-      else 
-      {
-          neighbours[i] = target.neighbours[i];
-      }
-   }
+   neighbours = target.neighbours;
    pos = target.pos;
    atomIndex = target.atomIndex;
-   neighbourCount = target.neighbourCount;
 }
 
 Atom::Atom (const Atom & target)
@@ -56,11 +37,7 @@ Atom::Atom (const Atom & target)
 
 void Atom::clearNeighbours()
 {
-   for (int i=0; i<sNeighbourCount; i++)
-   {
-      delNeighbour(i);
-   }
-   neighbourCount = 0;
+   for (int i=neighbours.size()-1; i>=0; i--) delNeighbour(i);
 }
 
 void Atom::setPos(const Point & coord)
@@ -70,19 +47,15 @@ void Atom::setPos(const Point & coord)
 
 void Atom::setNeighbour(Atom * pTarget)
 {
-   for (int i=0; i<sNeighbourCount; i++)
+   bool alreadyNeighbour = false;
+   for(unsigned int i=0;i<neighbours.size();i++)
    {
-      if (neighbours[i] == pTarget)
-      {
-         break;
-      }
-      if (neighbours[i] == this)
-      {
-         neighbours[i] = pTarget;
-         pTarget->setNeighbour(this);
-         neighbourCount += 1;
-         break;
-      }
+      if (neighbours[i] == pTarget) alreadyNeighbour = true;
+   }
+   if (!alreadyNeighbour)
+   {
+      neighbours.push_back(pTarget);
+      pTarget->neighbours.push_back(this);
    }
 }
 
@@ -98,25 +71,18 @@ Atom * Atom::getNeighbour(int num) const
 
 void Atom::delNeighbour(int num)
 {
-   int i;
-
-   for(i=0;i<sNeighbourCount;i++)
+   for(unsigned int i = 0; i < neighbours[num]->neighbours.size(); i++)
    {
-      if (neighbours[num]->neighbours[i] == this)
-      {
-         neighbours[num]->neighbours[i] = neighbours[num];
-      }
+      if (neighbours[num]->neighbours[i] == this) neighbours[num]->neighbours.erase(neighbours.begin()+i);
    }
-   if (neighbours[num] != this)
-      neighbourCount -= 1;
    
-   neighbours[num] = this;
+   neighbours.erase(neighbours.begin()+num);
 }
 
 void Atom::delRandNeighbour()
 {
    srand ( time(NULL) );
-   delNeighbour(rand() % neighbourCount);
+   delNeighbour(rand() % neighbours.size());
 }
 
 double Atom::getPos(char dimen) const
