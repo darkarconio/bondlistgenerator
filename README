@@ -1,8 +1,5 @@
 A program that generates a list of bonds for input into a LAMMPS calculation
 
-Requirements:
-GSL must be installed
-
 Installation:
 make
 
