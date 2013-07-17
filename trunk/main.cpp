@@ -27,7 +27,6 @@ double degRad(double);
 double pi();
 
 void changeAtomParam(vector<Atom>&, Parameters&);
-//double energy (vector<Atom>&, Parameters&, double, double);
 
 int main (int argc, char* argv[])
 {
@@ -51,27 +50,6 @@ int main (int argc, char* argv[])
 
    return 0;
 }
-
-/*double energy (vector<Atom>& atomList, Parameters& param, double stepSize, double tolerance)
-{
-   double potential;
-   int i;
-
-   changeAtomParam(atomList, param);
-   vector<Point> positions(param.pnt());
-   for (i=0; i<param.pnt(); i++)
-      positions[i] = atomList[i].getPos();
-
-   param.genBondList(atomList);
-
-   potential = optimizer(positions, param, stepSize, tolerance);
-   for (i=0; i<param.pnt(); i++)
-   {
-      atomList[i].setPos(positions[i]);
-   }
-
-   return potential;
-}*/
 
 int mod(int x, int m) 
 {
