@@ -45,6 +45,7 @@ int main (int argc, char* argv[])
    connectAtoms(atomList, exBond, param);
 //   param.delRandBond(atomList);
    param.genBondList(atomList);
+   param.genAngleList(atomList);
 
    outputAtoms(atomList, inputFile, param);
 
@@ -203,6 +204,8 @@ void connectAtoms(vector<Atom> & atoms, int target, Parameters & p)
 void outputAtoms(vector<Atom> & atoms, string fileName, Parameters & p)
 {
    int i;
+   set<Bond>::const_iterator it;
+   set<Angle>::const_iterator it2;
    fstream file ( (fileName.append(".out")).c_str(), fstream::in | fstream::out | fstream::trunc);
    
    file << fileName << endl << endl;
@@ -234,10 +237,20 @@ void outputAtoms(vector<Atom> & atoms, string fileName, Parameters & p)
    
    file << endl << "Bonds" << endl << endl;
    
-   for (i=0;i<p.bonds().size();i++)
+   i = 0;
+   for (it=p.bonds().begin();it!=p.bonds().end();++it)
    {
-      Bond outBond = p.bonds().get();
-      file << i+1 << " 1 " << outBond.index(0) << ' ' << outBond.index(1) << endl;
+      file << ++i << " 1 " << (*it)[0] << ' ' << (*it)[1] << endl;
+   }
+
+   if (p.angles().size() != 0)
+   {
+      file << endl << "Angles" << endl << endl;
+      i = 0;
+      for (it2=p.angles().begin();it2!=p.angles().end();++it2)
+      {
+         file << ++i << " 1 " << (*it2)[0] << ' ' << (*it2)[1] << ' ' << (*it2)[2] << endl;
+      }
    }
 
    file.close();

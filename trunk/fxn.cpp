@@ -1,14 +1,16 @@
 #include <iostream>
-#include <gsl/gsl_multimin.h>
+//#include <gsl/gsl_multimin.h>
 #include <vector>
 #include <string>
 #include <point.hpp>
 #include <fxn.hpp>
 #include <atom.hpp>
 #include <bond.hpp>
-#include <interaction.hpp>
 #include <set>
 #include <ctime>
+#include <cstdlib>
+#include <angle.hpp>
+#include <minexcept.hpp>
 
 using namespace std;
 
@@ -222,13 +224,36 @@ Point Parameters::checkPeriodBound (Point & c)
    
 void Parameters::genBondList(vector<Atom> & atoms)
 {
-   int i,j;
+   unsigned int i;
+   int j;
 
-   for (i=0;i<mpnt;i++)
+   for (i=0;i<atoms.size();i++)
    {
       for (j=0;j<atoms[i].getNumNeigh();j++)
       {
-         mbonds.add(Bond(&atoms[i], atoms[i].getNeighbour(j) ) );
+         mbonds.insert(Bond(&atoms[i], atoms[i].getNeighbour(j) ) );
+      }
+   }
+}
+
+void Parameters::genAngleList(vector<Atom> & atoms)
+{
+   unsigned int i;
+   int j,k;
+
+   for (i=0;i<atoms.size();i++)
+   {
+      for (j=0;j<atoms[i].getNumNeigh();j++)
+      {
+         for (k=0;k<atoms[i].getNeighbour(j)->getNumNeigh();k++)
+         {
+            try
+            {
+               mangles.insert( Angle( &atoms[i], atoms[i].getNeighbour(j), 
+                                      atoms[i].getNeighbour(j)->getNeighbour(k) ) );
+            }
+            catch (BadStructureException e) { continue; }
+         }
       }
    }
 }
@@ -241,6 +266,7 @@ void Parameters::delRandBond(vector<Atom> & atoms)
    {
       atoms[num].delRandNeighbour();
       genBondList(atoms);
+      if (mangles.size() != 0) genAngleList(atoms);
    }
    else delRandBond(atoms);
 }

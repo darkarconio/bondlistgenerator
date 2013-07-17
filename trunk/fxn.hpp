@@ -9,10 +9,12 @@
 #include <atom.hpp>
 #include <cmath>
 #include <bond.hpp>
-#include <interaction.hpp>
+#include <angle.hpp>
+#include <set>
 
 class Atom;
 class Bond;
+class Angle;
 
 //All info needed about the function
 class Parameters
@@ -24,7 +26,8 @@ class Parameters
       Matrix3 mdim; //matrix of the cell vectors
       Point mlen; //The length of each cell vector
       double mdist; //Optimal bond distance
-      Interaction mbonds; //List of bonds
+      std::set<Bond> mbonds; //List of bonds
+      std::set<Angle> mangles; //List of bonds
       double mk; //Elastic constant, k
       void copy (const Parameters&);
    public:
@@ -35,7 +38,8 @@ class Parameters
       int cxn () const {return mcxn;}
       double dist () const {return mdist;}
       Point len () const {return mlen;}
-      Interaction& bonds () {return mbonds;}
+      const std::set<Bond>& bonds () const {return mbonds;}
+      const std::set<Angle>& angles () const {return mangles;}
       Point dim (int n) const {return mdim.getPoint(n);}
       const Matrix3& dim () const {return mdim;}
       double volume() const {return fabs( mdim.tripleProduct() );}
@@ -48,7 +52,8 @@ class Parameters
       void setDim (Point pt, int n) {mdim.setPoint(pt,n); mlen.setCoord(pt.distance(), n);}
       void setDim (const Matrix3&);
       void genBondList (std::vector<Atom>&);
-      void delRandBond(std::vector<Atom>&);
+      void genAngleList (std::vector<Atom>&);
+      void delRandBond (std::vector<Atom>&);
 
       Parameters& operator= (const Parameters& other) {copy(other); return *this;}
       void strain (const Point&);
