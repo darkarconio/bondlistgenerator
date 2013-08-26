@@ -11,7 +11,7 @@
 #include <point.hpp>
 #include <fxn.hpp>
 #include <bond.hpp>
-#include <interaction.hpp>
+//#include <interaction.hpp>
 
 #define debug(x) cout << __LINE__ << ' ' << x << endl; cout.flush();
 
@@ -37,17 +37,20 @@ int main (int argc, char* argv[])
    int exBond = atoi(argv[2]);
    int cellFactor = atoi(argv[3]);
    Point cellMultiply(cellFactor);
+   int numDelBonds = atoi(argv[4]);
   
    readAtoms(atomList, inputFile, unitCellParam);
    param = unitCellParam;
    multiplyCell(atomList, cellMultiply, unitCellParam, param);
    connectAtoms(atomList, exBond, param);
-//   param.delRandBond(atomList);
+   
+   for (int i=0; i<numDelBonds; i++) param.delRandBond(atomList);
    param.genBondList(atomList);
    param.genAngleList(atomList);
 
    outputAtoms(atomList, inputFile, param);
-
+   
+   cout << param.averageCoord(atomList);
    return 0;
 }
 
@@ -189,14 +192,14 @@ void outputAtoms(vector<Atom> & atoms, string fileName, Parameters & p)
    file << fileName << endl << endl;
 
    file << p.pnt() << " atoms" << endl;
-   file << p.pnt()*p.cxn()/2 << " bonds" << endl; //does not support deleting bonds
-   file << "0 angles" << endl;
+   file << p.bonds().size() << " bonds" << endl;
+   file << p.angles().size() << " angles" << endl;
    file << "0 dihedrals" << endl;
    file << "0 impropers" << endl << endl;
 
    file << "1 atom types" << endl;
    file << "1 bond types" << endl;
-   file << "0 angle types" << endl;
+   file << "1 angle types" << endl;
    file << "0 dihedral types" << endl;
    file << "0 improper types" << endl << endl;
    
@@ -218,7 +221,7 @@ void outputAtoms(vector<Atom> & atoms, string fileName, Parameters & p)
    i = 0;
    for (it=p.bonds().begin();it!=p.bonds().end();++it)
    {
-      file << ++i << " 1 " << (*it)[0] << ' ' << (*it)[1] << endl;
+      file << ++i << " 1 " << (*it)[0]+1 << ' ' << (*it)[1]+1 << endl;
    }
 
    if (p.angles().size() != 0)
@@ -227,7 +230,7 @@ void outputAtoms(vector<Atom> & atoms, string fileName, Parameters & p)
       i = 0;
       for (it2=p.angles().begin();it2!=p.angles().end();++it2)
       {
-         file << ++i << " 1 " << (*it2)[0] << ' ' << (*it2)[1] << ' ' << (*it2)[2] << endl;
+         file << ++i << " 1 " << (*it2)[0]+1 << ' ' << (*it2)[1]+1 << ' ' << (*it2)[2]+1 << endl;
       }
    }
 

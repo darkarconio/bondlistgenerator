@@ -71,9 +71,10 @@ Atom * Atom::getNeighbour(int num) const
 
 void Atom::delNeighbour(int num)
 {
-   for(unsigned int i = 0; i < neighbours[num]->neighbours.size(); i++)
+   Atom * that = neighbours[num];
+   for(unsigned int i = 0; i < that->neighbours.size(); i++)
    {
-      if (neighbours[num]->neighbours[i] == this) neighbours[num]->neighbours.erase(neighbours.begin()+i);
+      if (that->neighbours[i] == this) that->neighbours.erase(that->neighbours.begin()+i);
    }
    
    neighbours.erase(neighbours.begin()+num);

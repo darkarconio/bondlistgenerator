@@ -54,6 +54,7 @@ class Parameters
       void genBondList (std::vector<Atom>&);
       void genAngleList (std::vector<Atom>&);
       void delRandBond (std::vector<Atom>&);
+      double averageCoord (std::vector<Atom>&);
 
       Parameters& operator= (const Parameters& other) {copy(other); return *this;}
       void strain (const Point&);
