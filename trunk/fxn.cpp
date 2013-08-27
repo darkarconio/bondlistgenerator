@@ -174,7 +174,7 @@ void Parameters::setDim (const Matrix3& other)
       mlen.setCoord( other.getPoint(i).distance(), i );
 }
 
-double averageCoord (std::vector<Atom>& atoms)
+double Parameters::averageCoord (std::vector<Atom>& atoms)
 {
    double coord = 0;
    for (unsigned int i=0; i<atoms.size(); i++) coord += atoms[i].getNumNeigh();

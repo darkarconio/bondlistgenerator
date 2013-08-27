@@ -1,7 +1,7 @@
 CC=g++
 VPATH=trunk
 CFLAGS=-Wall -ansi -I$(VPATH)# -std=c++0x
-LDFLAGS=-lgsl -lgslcblas
+LDFLAGS=
 
 all: generator
 
