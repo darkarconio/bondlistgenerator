@@ -26,6 +26,14 @@ Matrix::Matrix ()
    setAll(0);
 }
 
+Matrix::Matrix (int l)
+{
+   width = l;
+   height = l;
+   mElements = new double [width*height];
+   setAll(0);
+}
+
 Matrix::Matrix (int h, int w)
 {
    width = w;

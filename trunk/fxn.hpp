@@ -22,13 +22,13 @@ class Parameters
    private:
       int mpnt; //number of points
       int mvar; //number of variables, must always be 3*pnt
-      int mcxn; //number of connections per atom
+      int mcxn; //number of maximum connections per atom
       Matrix3 mdim; //matrix of the cell vectors
       Point mlen; //The length of each cell vector
       double mdist; //Optimal bond distance
       std::set<Bond> mbonds; //List of bonds
       std::set<Angle> mangles; //List of bonds
-      double mk; //Elastic constant, k
+      std::set<int> mdelCandidates; //List of atom indexes that can be deleted from
       void copy (const Parameters&);
    public:
       Parameters ();
@@ -43,9 +43,10 @@ class Parameters
       Point dim (int n) const {return mdim.getPoint(n);}
       const Matrix3& dim () const {return mdim;}
       double volume() const {return fabs( mdim.tripleProduct() );}
-      double k () const {return mk;}
-      
-      void k (double n) {mk = n;}
+      int nBonds () const {return mbonds.size();}
+      int nAngles () const {return mangles.size();}
+      int nCandidates () const {return mdelCandidates.size();}
+
       void pnt (int n) {mpnt = n; mvar = n*3;}
       void cxn (int n) {mcxn = n;}
       void dist (double n) {mdist = n;}
@@ -53,8 +54,8 @@ class Parameters
       void setDim (const Matrix3&);
       void genBondList (std::vector<Atom>&);
       void genAngleList (std::vector<Atom>&);
-      void delRandBond (std::vector<Atom>&);
-      double averageCoord (std::vector<Atom>&);
+      void delRandBond (std::vector<Atom>&, int);
+      void genDelList (std::vector<Atom>&);
 
       Parameters& operator= (const Parameters& other) {copy(other); return *this;}
       void strain (const Point&);

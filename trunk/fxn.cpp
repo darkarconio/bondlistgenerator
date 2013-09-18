@@ -72,6 +72,7 @@ Point Parameters::checkPeriodBound (Point & c)
    
 void Parameters::genBondList(vector<Atom> & atoms)
 {
+   mbonds.clear();
    unsigned int i;
    int j;
 
@@ -86,6 +87,7 @@ void Parameters::genBondList(vector<Atom> & atoms)
 
 void Parameters::genAngleList(vector<Atom> & atoms)
 {
+   mangles.clear();
    unsigned int i;
    int j,k;
 
@@ -106,18 +108,43 @@ void Parameters::genAngleList(vector<Atom> & atoms)
    }
 }
 
-void Parameters::delRandBond(vector<Atom> & atoms)
+void Parameters::genDelList (std::vector<Atom> & atoms)
 {
-   srand ( time(NULL) );
-   int num = rand() % atoms.size();
+   for (unsigned int i=0; i<atoms.size(); i++)
+   {
+      mdelCandidates.insert(atoms[i].getIndex());
+   }
+}
+
+/****** Depricated ******
+void Parameters::delRandBond(vector<Atom> & atoms, int c)
+{
+   set<int>::iterator it = mdelCandidates.begin();
+   it += rand() % nCandidates();
+   int num = *it;
    if (atoms[num].getNumNeigh() > 2) 
    {
-      atoms[num].delRandNeighbour();
+      if (atoms[num].delRandNeighbour())
+      {
+         
+      }
+      else 
+      {
+         mdelCandidates.erase(num);
+         delRandBond(atoms, ++c);
+      }
       genBondList(atoms);
       if (mangles.size() != 0) genAngleList(atoms);
    }
-   else delRandBond(atoms);
-}
+   else 
+   {
+   //if (c > 5) debug(atoms[num].getNumNeigh());
+   if (c > 5) debug(num);
+      mdelCandidates.erase(num);
+   debug(c)
+      delRandBond(atoms, ++c);
+   }
+}*/
 
 Parameters::Parameters()
 {
@@ -125,7 +152,11 @@ Parameters::Parameters()
    mvar = 0;
    mdist = 1;
    mcxn = 0;
-   mk = 1;
+   mdim = Matrix3();
+   mlen = Point();
+   mbonds = set<Bond>();
+   mangles = set<Angle>();
+   mdelCandidates = set<int>();
 }
 
 void Parameters::copy(const Parameters & other)
@@ -134,9 +165,10 @@ void Parameters::copy(const Parameters & other)
    mcxn = other.mcxn;
    mdist = other.mdist;
    mbonds = other.mbonds;
+   mangles = other.mangles;
+   mdelCandidates = other.mdelCandidates;
    mdim = other.mdim;
    mlen = other.mlen;
-   mk = other.mk;
 }
 
 void Parameters::strain(const Point & strain)
@@ -172,11 +204,4 @@ void Parameters::setDim (const Matrix3& other)
    mdim = other;
    for (int i=0; i<3; i++)
       mlen.setCoord( other.getPoint(i).distance(), i );
-}
-
-double Parameters::averageCoord (std::vector<Atom>& atoms)
-{
-   double coord = 0;
-   for (unsigned int i=0; i<atoms.size(); i++) coord += atoms[i].getNumNeigh();
-   return coord/(double)atoms.size();
 }

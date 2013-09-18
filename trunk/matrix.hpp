@@ -11,6 +11,7 @@ class Matrix
    public:
       Matrix ();
       Matrix (const Matrix& other) { mElements = new double [0]; copy(other); }
+      Matrix (int);
       Matrix (int, int);
       Matrix (int, int, double);
       Matrix (const double [], int, int);

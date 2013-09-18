@@ -5,6 +5,7 @@
 #include <matrix3.hpp>
 #include <fxn.hpp>
 #include <vector>
+#include <string>
 
 class Parameters;
 
@@ -12,13 +13,22 @@ class Atom
 {
    private:
       int atomIndex;
-      Point pos; //position relative to cellInfo->dim()
+      Point pos; //position relative to cellInfo.dim()
       std::vector<Atom*> neighbours;
       void copy(const Atom&);
-      Parameters *cellInfo; //vectors defining cell Atom is found in
+      static const unsigned int MIN_BOND = 2;
    public:
-      Atom(Parameters*);
-      Atom(const Point&, int, Parameters*);
+      static std::vector<Atom> atomList;
+      static Matrix adjMatrix;
+      static Parameters cellInfo; //vectors defining cell Atom is found in
+
+      static void readAtoms(std::string);
+      static void multiplyCell(Point);
+      static void connectAtoms(int);
+      static void outputAtoms(std::string);
+
+      Atom();
+      Atom(const Point&, int);
       Atom(const Atom&);
 
       void setPos(const Point&);
@@ -26,9 +36,9 @@ class Atom
       void setNeighbour(Atom*);
       void delNeighbour(int);
       void clearNeighbours();
-      void delRandNeighbour();
+      bool delRandNeighbour();
       void setIndex(int);
-      void setParam(Parameters*);
+      void setParam(Parameters);
       
       int getNumNeigh() const {return neighbours.size();}
       double getPos(char) const;
