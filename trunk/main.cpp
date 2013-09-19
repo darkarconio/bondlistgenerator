@@ -37,22 +37,12 @@ int main (int argc, char* argv[])
 
    Atom::readAtoms(inputFile);
    Atom::multiplyCell(Point(cellFactor));
-//   Atom::adjMatrix = Matrix(Atom::atomList.size()); 
    Atom::connectAtoms(exBond);
   
-   Atom::cellInfo.genBondList(Atom::atomList);
-   Atom::cellInfo.genDelList(Atom::atomList);
-   Atom::cellInfo.genAngleList(Atom::atomList);
-
-//   int maxDeletions = param.nBonds()/2;
-/*   for (int i=0; i<numDelBonds; i++) 
-   {
-      if (i > maxDeletions) break;
-      if (param.nCandidates() == 0) break;
-      param.delRandBond(Atom::atomList, 0);
-   }
-   param.genBondList(Atom::atomList);*/
-
+   Atom::genBondList();
+   Atom::genDelList();
+   Atom::genAngleList();
+   
    Atom::outputAtoms(inputFile);
    
    cout << (double)Atom::cellInfo.nBonds()/(double)Atom::atomList.size(); //Bond density

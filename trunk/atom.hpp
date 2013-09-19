@@ -26,6 +26,9 @@ class Atom
       static void multiplyCell(Point);
       static void connectAtoms(int);
       static void outputAtoms(std::string);
+      static void genBondList();
+      static void genAngleList();
+      static void genDelList();
 
       Atom();
       Atom(const Point&, int);

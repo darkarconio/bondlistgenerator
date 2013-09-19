@@ -70,52 +70,6 @@ Point Parameters::checkPeriodBound (Point & c)
    return c;
 }
    
-void Parameters::genBondList(vector<Atom> & atoms)
-{
-   mbonds.clear();
-   unsigned int i;
-   int j;
-
-   for (i=0;i<atoms.size();i++)
-   {
-      for (j=0;j<atoms[i].getNumNeigh();j++)
-      {
-         mbonds.insert(Bond(&atoms[i], atoms[i].getNeighbour(j) ) );
-      }
-   }
-}
-
-void Parameters::genAngleList(vector<Atom> & atoms)
-{
-   mangles.clear();
-   unsigned int i;
-   int j,k;
-
-   for (i=0;i<atoms.size();i++)
-   {
-      for (j=0;j<atoms[i].getNumNeigh();j++)
-      {
-         for (k=0;k<atoms[i].getNeighbour(j)->getNumNeigh();k++)
-         {
-            try
-            {
-               mangles.insert( Angle( &atoms[i], atoms[i].getNeighbour(j), 
-                                      atoms[i].getNeighbour(j)->getNeighbour(k) ) );
-            }
-            catch (BadStructureException e) { continue; }
-         }
-      }
-   }
-}
-
-void Parameters::genDelList (std::vector<Atom> & atoms)
-{
-   for (unsigned int i=0; i<atoms.size(); i++)
-   {
-      mdelCandidates.insert(atoms[i].getIndex());
-   }
-}
-
 /****** Depricated ******
 void Parameters::delRandBond(vector<Atom> & atoms, int c)
 {

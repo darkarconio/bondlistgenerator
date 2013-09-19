@@ -31,6 +31,8 @@ class Parameters
       std::set<int> mdelCandidates; //List of atom indexes that can be deleted from
       void copy (const Parameters&);
    public:
+      friend class Atom;
+      
       Parameters ();
       Parameters (const Parameters& other) {copy(other);}
       int pnt () const {return mpnt;}
@@ -52,8 +54,6 @@ class Parameters
       void dist (double n) {mdist = n;}
       void setDim (Point pt, int n) {mdim.setPoint(pt,n); mlen.setCoord(pt.distance(), n);}
       void setDim (const Matrix3&);
-      void genBondList (std::vector<Atom>&);
-      void genAngleList (std::vector<Atom>&);
       void delRandBond (std::vector<Atom>&, int);
       void genDelList (std::vector<Atom>&);
 

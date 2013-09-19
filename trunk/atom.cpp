@@ -215,6 +215,7 @@ void Atom::multiplyCell(Point n)
 void Atom::connectAtoms(int target)
 {
    int size = atomList.size();
+   adjMatrix = Matrix(size);
    Point a,b;
    int nBond = 0;
    cellInfo.cxn(0);
@@ -236,6 +237,7 @@ void Atom::connectAtoms(int target)
          if ( fabs(cellDist - cellInfo.dist()) < epsilon)
          {
             atomList[i].setNeighbour(&atomList[j]);
+            adjMatrix.setSym(i,j,1);
             nBond++;
          }
       }
@@ -301,4 +303,47 @@ void Atom::outputAtoms(string fileName)
    }
 
    file.close();
+}
+
+void Atom::genBondList()
+{
+   cellInfo.mbonds.clear();
+   unsigned int i,j;
+
+   for (i=0;i<atomList.size();i++)
+   {
+      for (j=i+1;j<atomList.size();j++)
+      {
+         if (adjMatrix.get(i,j) == 1) cellInfo.mbonds.insert(Bond(&atomList[i], &atomList[j]) );
+      }
+   }
+}
+
+void Atom::genAngleList()
+{
+   cellInfo.mangles.clear();
+   unsigned int i,j,k;
+
+   for (i=0;i<atomList.size();i++)
+   {
+      for (j=0;j<atomList.size();j++)
+      {
+         for (k=j+1;k<atomList.size();k++)
+         {
+            if (adjMatrix.get(i,j) == 1 && adjMatrix.get(i,k) == 1)
+            {
+               try { cellInfo.mangles.insert( Angle( &atomList[i], &atomList[j], &atomList[k]) ); }
+               catch (BadStructureException e) { continue; }
+            }
+         }
+      }
+   }
+}
+
+void Atom::genDelList()
+{
+   for (unsigned int i=0; i<atomList.size(); i++)
+   {
+      cellInfo.mdelCandidates.insert(atomList[i].getIndex());
+   }
 }
