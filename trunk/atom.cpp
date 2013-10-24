@@ -82,12 +82,51 @@ void Atom::delNeighbour(int num)
    
    neighbours.erase(neighbours.begin()+num);
 }
-
-bool Atom::delRandNeighbour()
+/* DEPRICATED
+bool Atom::delRandNeighbour() //Depricated
 {
    for (unsigned int i=0; i<neighbours.size(); i++) if (neighbours[i]->neighbours.size() <= MIN_BOND) return false;
    delNeighbour(rand() % neighbours.size());
    return true;
+}*/
+
+bool Atom::delRandBond()
+{
+   Bond candidate(*(cellInfo.moffCandidates.begin()));
+   int i = 1;
+   bool success = false;
+   for (set<Bond>::iterator it=cellInfo.moffCandidates.begin(); it!=cellInfo.moffCandidates.end();)
+   {
+      if (!it->offCandidate())
+      {
+         cellInfo.moffCandidates.erase(*it++);
+         continue;
+      }
+      if (rand() % i == 0)
+      {
+         candidate = *it;
+         success = true;
+      }
+      it++;
+      i++;
+   }
+   if (success)
+   {
+      cellInfo.moffCandidates.erase(candidate);
+      bondOff(candidate);
+   }
+   return success;
+}
+
+int Atom::getNumBonds() const
+{
+   int numBond = 0;
+   for (int i=0; i<adjMatrix.columns(); i++)
+   {
+      if (adjMatrix.get(atomIndex,i) == 1)
+         numBond += 1;
+   }
+   return numBond;
 }
 
 double Atom::getPos(char dimen) const
@@ -342,8 +381,26 @@ void Atom::genAngleList()
 
 void Atom::genDelList()
 {
-   for (unsigned int i=0; i<atomList.size(); i++)
+   cellInfo.moffCandidates = cellInfo.mbonds;
+}
+
+void Atom::bondOff(Bond target)
+{
+   int i = target[0];
+   int j = target[1];
+   if (adjMatrix.get(i,j) != 0)
    {
-      cellInfo.mdelCandidates.insert(atomList[i].getIndex());
+      adjMatrix.setSym(i,j,-1);
+   }
+
+}
+
+void Atom::bondOn(Bond target)
+{
+   int i = target[0];
+   int j = target[1];
+   if (adjMatrix.get(i,j) != 0)
+   {
+      adjMatrix.setSym(i,j,1);
    }
 }

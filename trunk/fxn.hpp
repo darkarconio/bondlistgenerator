@@ -4,13 +4,13 @@
 #include <matrix.hpp>
 #include <matrix3.hpp>
 #include <vector>
+#include <set>
 #include <string>
 #include <point.hpp>
 #include <atom.hpp>
 #include <cmath>
 #include <bond.hpp>
 #include <angle.hpp>
-#include <set>
 
 class Atom;
 class Bond;
@@ -28,8 +28,9 @@ class Parameters
       double mdist; //Optimal bond distance
       std::set<Bond> mbonds; //List of bonds
       std::set<Angle> mangles; //List of bonds
-      std::set<int> mdelCandidates; //List of atom indexes that can be deleted from
+      std::set<Bond> moffCandidates; //List of atom indexes that can be deleted from
       void copy (const Parameters&);
+
    public:
       friend class Atom;
       
@@ -47,7 +48,7 @@ class Parameters
       double volume() const {return fabs( mdim.tripleProduct() );}
       int nBonds () const {return mbonds.size();}
       int nAngles () const {return mangles.size();}
-      int nCandidates () const {return mdelCandidates.size();}
+      int nCandidates () const {return moffCandidates.size();}
 
       void pnt (int n) {mpnt = n; mvar = n*3;}
       void cxn (int n) {mcxn = n;}
@@ -65,7 +66,4 @@ class Parameters
       Point getRealDiff (Point&, Point&); //Returns the distance between atoms bonded across cell boundaries
       Point checkPeriodBound (Point&); //Shifts a point back into the cell if the optimization moves it outside
 };
-
-double optimizer (std::vector<Point>&, Parameters&, double, double);
-
 #endif

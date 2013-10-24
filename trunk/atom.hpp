@@ -6,8 +6,10 @@
 #include <fxn.hpp>
 #include <vector>
 #include <string>
+#include <bond.hpp>
 
 class Parameters;
+class Bond;
 
 class Atom
 {
@@ -15,8 +17,12 @@ class Atom
       int atomIndex;
       Point pos; //position relative to cellInfo.dim()
       std::vector<Atom*> neighbours;
+
       void copy(const Atom&);
-      static const unsigned int MIN_BOND = 2;
+      
+      static void bondOff(Bond);
+      static void bondOn(Bond);
+
    public:
       static std::vector<Atom> atomList;
       static Matrix adjMatrix;
@@ -29,6 +35,7 @@ class Atom
       static void genBondList();
       static void genAngleList();
       static void genDelList();
+      static bool delRandBond();
 
       Atom();
       Atom(const Point&, int);
@@ -37,13 +44,14 @@ class Atom
       void setPos(const Point&);
       void setRelPos(const Point& other) {pos = other;}
       void setNeighbour(Atom*);
-      void delNeighbour(int);
       void clearNeighbours();
-      bool delRandNeighbour();
       void setIndex(int);
       void setParam(Parameters);
-      
+      void delNeighbour(int); //For changing crystal, not bonding structure
+      //bool delRandNeighbour(); //Depricated
+
       int getNumNeigh() const {return neighbours.size();}
+      int getNumBonds() const;
       double getPos(char) const;
       double getPos(int) const;
       Point getPos() const;
@@ -52,6 +60,7 @@ class Atom
       Atom* getNeighbour(int) const;
       int getIndex() const;
       int getNeighbourIndex(int) const;
+      
       Atom& operator=(const Atom& other) {copy(other); return *this;}
       bool operator==(const Atom& other) const {return atomIndex == other.atomIndex;}
       bool operator<(const Atom& other) const {return atomIndex < other.atomIndex;}

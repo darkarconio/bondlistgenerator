@@ -110,7 +110,7 @@ Parameters::Parameters()
    mlen = Point();
    mbonds = set<Bond>();
    mangles = set<Angle>();
-   mdelCandidates = set<int>();
+   moffCandidates = set<Bond>();
 }
 
 void Parameters::copy(const Parameters & other)
@@ -120,7 +120,7 @@ void Parameters::copy(const Parameters & other)
    mdist = other.mdist;
    mbonds = other.mbonds;
    mangles = other.mangles;
-   mdelCandidates = other.mdelCandidates;
+   moffCandidates = other.moffCandidates;
    mdim = other.mdim;
    mlen = other.mlen;
 }

@@ -33,7 +33,7 @@ int main (int argc, char* argv[])
    int exBond = atoi(argv[2]);
    int cellFactor = atoi(argv[3]);
    int numDelBonds = atoi(argv[4]);
-   //srand ( time(NULL) );
+   srand ( time(NULL) );
 
    Atom::readAtoms(inputFile);
    Atom::multiplyCell(Point(cellFactor));
@@ -41,11 +41,22 @@ int main (int argc, char* argv[])
   
    Atom::genBondList();
    Atom::genDelList();
+   
+   for (int i=0; i<numDelBonds;)
+   {
+      if (Atom::delRandBond())
+         i++;
+      if (Atom::cellInfo.nCandidates() == 0)
+         break;
+   }
+   
+   Atom::genBondList();
    Atom::genAngleList();
    
    Atom::outputAtoms(inputFile);
    
-   cout << (double)Atom::cellInfo.nBonds()/(double)Atom::atomList.size(); //Bond density
+   cout << (double)Atom::cellInfo.nBonds()/(double)Atom::atomList.size() << endl;//Bond density
+   cout << Atom::cellInfo.nCandidates() << endl;
 
    return 0;
 }

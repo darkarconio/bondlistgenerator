@@ -1,7 +1,7 @@
 #include <atom.hpp>
 #include <bond.hpp>
 
-Bond::Bond (Atom* c, Atom* d)
+Bond::Bond (const Atom* c, const Atom* d)
 {
    if (c > d)
    {
@@ -13,6 +13,12 @@ Bond::Bond (Atom* c, Atom* d)
       a = c;
       b = d;
    }
+}
+
+void Bond::copy (const Bond& target)
+{
+   a = target.a;
+   b = target.b;
 }
 
 bool Bond::operator== (const Bond & other) const 
@@ -29,4 +35,9 @@ int Bond::operator[] (unsigned int i) const
 {
    if (i==0) return a->getIndex();
    return b->getIndex(); 
+}
+
+bool Bond::offCandidate() const
+{
+   return (a->getNumBonds() > MIN_BOND && b->getNumBonds() > MIN_BOND);
 }
