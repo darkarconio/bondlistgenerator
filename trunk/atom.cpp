@@ -364,7 +364,7 @@ void Atom::genAngleList()
          {
             if (adjMatrix.get(i,j) == 1 && adjMatrix.get(i,k) == 1)
             {
-               try { cellInfo.mangles.insert( Angle( &atomList[i], &atomList[j], &atomList[k]) ); }
+               try { cellInfo.mangles.insert( Angle( &atomList[j], &atomList[i], &atomList[k]) ); }
                catch (BadStructureException e) { continue; }
             }
          }
