@@ -34,16 +34,22 @@ int main (int argc, char* argv[])
    int cellFactor = atoi(argv[3]);
    double percentDelBonds = atof(argv[4]);
    srand ( time(NULL) );
+   time_t start = time(NULL);
 
    Atom::readAtoms(inputFile);
    Atom::multiplyCell(Point(cellFactor));
+   cout << "Connecting atoms..." << endl;
    Atom::connectAtoms(exBond);
+   time_t connected = time(NULL);
+   cout << "Connecting time: " << difftime(time(NULL), start) << endl;
   
+//   cout << "Generating Bonding Lists..." << endl;
    Atom::genBondList();
    Atom::genDelList();
    
    int numDelBonds = (int)(percentDelBonds/100*Atom::cellInfo.nBonds());
    
+   cout << "Deleting Atoms..." << endl;
    for (int i=0; i<numDelBonds;)
    {
       if (Atom::delRandBond())
@@ -53,12 +59,17 @@ int main (int argc, char* argv[])
    }
    
    Atom::genBondList();
+   cout << "Generating angle list..." << endl;
    Atom::genAngleList();
+   time_t angles = time(NULL);
+   cout << "Angle list time: " << difftime(time(NULL), connected) << endl;
    
+//   cout << "Printing output..." << endl;
    Atom::outputAtoms(inputFile);
    
-   cout << (double)Atom::cellInfo.nBonds()/(double)Atom::atomList.size() << endl;//Bond density
-   cout << Atom::cellInfo.nCandidates() << endl;
+   cout << "Bond Density: " << (double)Atom::cellInfo.nBonds()/(double)Atom::atomList.size() << endl;//Bond density
+   cout << "Deletable Atoms: " << Atom::cellInfo.nCandidates() << endl;
+   cout << "Total time: " << difftime(time(NULL), start) << endl;
 
    return 0;
 }
