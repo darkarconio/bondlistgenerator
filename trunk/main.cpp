@@ -32,7 +32,7 @@ int main (int argc, char* argv[])
    string inputFile = argv[1];
    int exBond = atoi(argv[2]);
    int cellFactor = atoi(argv[3]);
-   int numDelBonds = atoi(argv[4]);
+   double percentDelBonds = atof(argv[4]);
    srand ( time(NULL) );
 
    Atom::readAtoms(inputFile);
@@ -41,6 +41,8 @@ int main (int argc, char* argv[])
   
    Atom::genBondList();
    Atom::genDelList();
+   
+   int numDelBonds = (int)(percentDelBonds/100*Atom::cellInfo.nBonds());
    
    for (int i=0; i<numDelBonds;)
    {

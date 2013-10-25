@@ -48,7 +48,6 @@ class Atom
       void setIndex(int);
       void setParam(Parameters);
       void delNeighbour(int); //For changing crystal, not bonding structure
-      //bool delRandNeighbour(); //Depricated
 
       int getNumNeigh() const {return neighbours.size();}
       int getNumBonds() const;

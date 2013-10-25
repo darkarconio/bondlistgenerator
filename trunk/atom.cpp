@@ -82,13 +82,6 @@ void Atom::delNeighbour(int num)
    
    neighbours.erase(neighbours.begin()+num);
 }
-/* DEPRICATED
-bool Atom::delRandNeighbour() //Depricated
-{
-   for (unsigned int i=0; i<neighbours.size(); i++) if (neighbours[i]->neighbours.size() <= MIN_BOND) return false;
-   delNeighbour(rand() % neighbours.size());
-   return true;
-}*/
 
 bool Atom::delRandBond()
 {
