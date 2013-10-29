@@ -59,10 +59,12 @@ int main (int argc, char* argv[])
    }
    
    Atom::genBondList();
+   time_t deletions = time(NULL);
+   cout << "Deletion time: " << difftime(time(NULL), connected) << endl;
+   
    cout << "Generating angle list..." << endl;
    Atom::genAngleList();
-   time_t angles = time(NULL);
-   cout << "Angle list time: " << difftime(time(NULL), connected) << endl;
+   cout << "Angle list time: " << difftime(time(NULL), deletions) << endl;
    
 //   cout << "Printing output..." << endl;
    Atom::outputAtoms(inputFile);
