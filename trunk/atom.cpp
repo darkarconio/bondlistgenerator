@@ -397,3 +397,17 @@ void Atom::bondOn(Bond target)
       adjMatrix.setSym(i,j,1);
    }
 }
+
+int Atom::getNumCoordX(int n)
+{
+   int numCoordX = 0;
+   for (unsigned int i=0; i<atomList.size(); i++)
+   {
+      if (atomList[i].getNumBonds() == n)
+      {
+         numCoordX++;
+      }
+   }
+
+   return numCoordX;
+}

@@ -36,6 +36,7 @@ class Atom
       static void genAngleList();
       static void genDelList();
       static bool delRandBond();
+      static int getNumCoordX(int);
 
       Atom();
       Atom(const Point&, int);

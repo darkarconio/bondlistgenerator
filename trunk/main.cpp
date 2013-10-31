@@ -69,7 +69,10 @@ int main (int argc, char* argv[])
 //   cout << "Printing output..." << endl;
    Atom::outputAtoms(inputFile);
    
-   cout << "Bond Density: " << (double)Atom::cellInfo.nBonds()/(double)Atom::atomList.size() << endl;//Bond density
+   cout << "Average Coordination: " << 2*(double)Atom::cellInfo.nBonds()/(double)Atom::atomList.size() << endl;
+   cout << "Num Coord 2: " << Atom::getNumCoordX(2) << endl;
+   cout << "Num Coord 3: " << Atom::getNumCoordX(3) << endl;
+   cout << "Num Coord 4: " << Atom::getNumCoordX(4) << endl;
    cout << "Deletable Atoms: " << Atom::cellInfo.nCandidates() << endl;
    cout << "Total time: " << difftime(time(NULL), start) << endl;
 
