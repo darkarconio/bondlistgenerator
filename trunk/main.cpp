@@ -12,16 +12,10 @@
 #include <point.hpp>
 #include <fxn.hpp>
 #include <bond.hpp>
-//#include <interaction.hpp>
 
 #define debug(x) cout << __LINE__ << ' ' << x << endl; cout.flush();
 
 using namespace std;
-
-int mod(int, int); 
-double degRad(double);
-
-const long double PI = 3.141592653589793238;
 
 vector<Atom> Atom::atomList;
 Matrix Atom::adjMatrix = Matrix();
@@ -67,14 +61,4 @@ int main (int argc, char* argv[])
    cout << "Total time: " << difftime(time(NULL), start) << endl;
 
    return 0;
-}
-
-int mod(int x, int m) 
-{
-   return (x%m + m)%m;
-}
-
-double degRad(double deg)
-{
-   return (deg * PI / 180);
 }
