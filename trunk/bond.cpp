@@ -37,7 +37,11 @@ int Bond::operator[] (unsigned int i) const
    return b->getIndex(); 
 }
 
-bool Bond::offCandidate() const
+bool Bond::offCandidate(bool guideDel) const
 {
-   return (a->getNumBonds() > MIN_BOND && b->getNumBonds() > MIN_BOND);
+   if (guideDel)
+      return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_BOND) ||
+             (b->getNumBonds() > MIN_NEIGH_BOND && a->getNumBonds() > MIN_BOND);
+   else
+      return (a->getNumBonds() > MIN_BOND && b->getNumBonds() > MIN_BOND);
 }

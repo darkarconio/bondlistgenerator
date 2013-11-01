@@ -35,7 +35,8 @@ class Atom
       static void genBondList();
       static void genAngleList();
       static void genDelList();
-      static bool delRandBond();
+      static bool delRandBond(bool);
+      static int delPercentBond(double, bool);
       static int getNumCoordX(int);
 
       Atom();

@@ -33,31 +33,22 @@ int main (int argc, char* argv[])
    int exBond = atoi(argv[2]);
    int cellFactor = atoi(argv[3]);
    double percentDelBonds = atof(argv[4]);
+   bool modDelete = !(bool)(strcmp(argv[5], "guide"));
    srand ( time(NULL) );
    time_t start = time(NULL);
 
    Atom::readAtoms(inputFile);
    Atom::multiplyCell(Point(cellFactor));
+   
    cout << "Connecting atoms..." << endl;
    Atom::connectAtoms(exBond);
    time_t connected = time(NULL);
    cout << "Connecting time: " << difftime(time(NULL), start) << endl;
   
-//   cout << "Generating Bonding Lists..." << endl;
+   cout << "Deleting Atoms..." << endl;
    Atom::genBondList();
    Atom::genDelList();
-   
-   int numDelBonds = (int)(percentDelBonds/100*Atom::cellInfo.nBonds());
-   
-   cout << "Deleting Atoms..." << endl;
-   for (int i=0; i<numDelBonds;)
-   {
-      if (Atom::delRandBond())
-         i++;
-      if (Atom::cellInfo.nCandidates() == 0)
-         break;
-   }
-   
+   Atom::delPercentBond(percentDelBonds, modDelete);
    Atom::genBondList();
    time_t deletions = time(NULL);
    cout << "Deletion time: " << difftime(time(NULL), connected) << endl;
@@ -66,7 +57,6 @@ int main (int argc, char* argv[])
    Atom::genAngleList();
    cout << "Angle list time: " << difftime(time(NULL), deletions) << endl;
    
-//   cout << "Printing output..." << endl;
    Atom::outputAtoms(inputFile);
    
    cout << "Average Coordination: " << 2*(double)Atom::cellInfo.nBonds()/(double)Atom::atomList.size() << endl;
