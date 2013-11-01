@@ -5,3 +5,5 @@ generator
 macgenerator
 
 *.o
+
+trunk/*swp
