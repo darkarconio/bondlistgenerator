@@ -8,3 +8,7 @@ generator
 macgenerator
 
 generator
+
+*.o
+
+generator
