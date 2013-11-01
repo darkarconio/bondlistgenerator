@@ -1,14 +1,7 @@
-
-*.out
-
 *.out
 
 generator
 
 macgenerator
 
-generator
-
 *.o
-
-generator
