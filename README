@@ -7,4 +7,4 @@ Input:
 An xsf file with the structure info
 
 Running the Program:
-./minimization [input file] [equilibrium bond length] [multiplication factor for the input cell]
+./minimization [input file] [equilibrium bond length] [multiplication factor for the input cell] [% bonds to be deleted] ["guide" or "noguide" deletion]
