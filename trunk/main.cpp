@@ -52,6 +52,7 @@ int main (int argc, char* argv[])
    cout << "Angle list time: " << difftime(time(NULL), deletions) << endl;
    
    Atom::outputAtoms(inputFile);
+   Atom::cellInfo.writeBondLoc();
    
    cout << "Average Coordination: " << 2*(double)Atom::cellInfo.nBonds()/(double)Atom::atomList.size() << endl;
    cout << "Num Coord 2: " << Atom::getNumCoordX(2) << endl;

@@ -24,7 +24,8 @@ class Bond
       bool operator< (const Bond&) const;
       int operator[] (unsigned int) const;
       Bond& operator= (const Bond& other) { copy(other); return *this; }
-      bool offCandidate(bool) const; 
+      bool offCandidate(bool) const;
+      Point location() const;
 };
 
 #endif

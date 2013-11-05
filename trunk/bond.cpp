@@ -1,5 +1,6 @@
 #include <atom.hpp>
 #include <bond.hpp>
+#include <fxn.hpp>
 
 Bond::Bond (const Atom* c, const Atom* d)
 {
@@ -44,4 +45,11 @@ bool Bond::offCandidate(bool guideDel) const
              (b->getNumBonds() > MIN_NEIGH_BOND && a->getNumBonds() > MIN_BOND);
    else
       return (a->getNumBonds() > MIN_BOND && b->getNumBonds() > MIN_BOND);
+}
+
+Point Bond::location() const
+{
+   Point locA = a->getPos();
+   Point locB = b->getPos();
+   return a->cellInfo.getRealAvg(locA, locB);
 }

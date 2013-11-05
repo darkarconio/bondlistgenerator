@@ -1,13 +1,16 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
+#include <set>
+
+#include <ctime>
+#include <cstdlib>
+
 #include <point.hpp>
 #include <fxn.hpp>
 #include <atom.hpp>
 #include <bond.hpp>
-#include <set>
-#include <ctime>
-#include <cstdlib>
 #include <angle.hpp>
 #include <minexcept.hpp>
 
@@ -69,6 +72,12 @@ Point Parameters::checkPeriodBound (Point & c)
    }
    return c;
 }
+
+Point Parameters::getRealAvg (Point & a, Point & b)
+{
+   Point avg = getRealDiff(a,b)/2 + b;
+   return checkPeriodBound(avg);
+}
    
 /****** Depricated ******
 void Parameters::delRandBond(vector<Atom> & atoms, int c)
@@ -123,6 +132,18 @@ void Parameters::copy(const Parameters & other)
    moffCandidates = other.moffCandidates;
    mdim = other.mdim;
    mlen = other.mlen;
+}
+
+void Parameters::writeBondLoc() const
+{
+   int i=0;
+   set<Bond>::const_iterator it;
+   fstream file ( "bondloc.out", fstream::in | fstream::out | fstream::trunc);
+   
+   for (it=mbonds.begin();it!=mbonds.end();++it)
+   {
+      file << ++i << ' ' << it->location().x() << ' ' << it->location().y() << ' ' << it->location().z() << endl;
+   }
 }
 
 void Parameters::strain(const Point & strain)

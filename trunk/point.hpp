@@ -17,6 +17,7 @@ class Point: public Matrix
       double dot (const Point&) const;
       Point cross (const Point&) const;
       Point operator* (double n) const {Point product( Matrix::operator* (n)); return product;}
+      Point operator/ (double n) const {Point product( Matrix::operator* (1/n)); return product;}
       Point operator+ (const Point& other) const {Point sum (Matrix::operator+(other)); return sum;}
       Point operator- (const Point& other) const {Point diff (Matrix::operator-(other)); return diff;}
       Point& operator= (const Point& other) { return *static_cast<Point*> (&Matrix::operator=(other)) ; }

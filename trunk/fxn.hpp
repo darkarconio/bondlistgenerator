@@ -36,6 +36,7 @@ class Parameters
       
       Parameters ();
       Parameters (const Parameters& other) {copy(other);}
+
       int pnt () const {return mpnt;}
       int var () const {return mvar;}
       int cxn () const {return mcxn;}
@@ -49,7 +50,7 @@ class Parameters
       int nBonds () const {return mbonds.size();}
       int nAngles () const {return mangles.size();}
       int nCandidates () const {return moffCandidates.size();}
-
+      
       void pnt (int n) {mpnt = n; mvar = n*3;}
       void cxn (int n) {mcxn = n;}
       void dist (double n) {mdist = n;}
@@ -58,12 +59,16 @@ class Parameters
       void delRandBond (std::vector<Atom>&, int);
       void genDelList (std::vector<Atom>&);
 
+      void writeBondLoc() const;
+
       Parameters& operator= (const Parameters& other) {copy(other); return *this;}
+      
       void strain (const Point&);
       void strain (const Point&, const Point&);
       void strain (const Matrix3&);
       
       Point getRealDiff (Point&, Point&); //Returns the distance between atoms bonded across cell boundaries
       Point checkPeriodBound (Point&); //Shifts a point back into the cell if the optimization moves it outside
+      Point getRealAvg (Point&, Point&);
 };
 #endif
