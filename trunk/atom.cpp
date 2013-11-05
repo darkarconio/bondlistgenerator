@@ -111,6 +111,29 @@ bool Atom::delRandBond(bool guideDel)
    return success;
 }
 
+bool Atom::delRandAtom()
+{
+   Atom candidate(*(cellInfo.mdelCandidates.begin()));
+   int i = 1;
+   bool success = false;
+   for (set<Atom>::iterator it=cellInfo.mdelCandidates.begin(); it!=cellInfo.mdelCandidates.end();)
+   {
+      if (rand() % i == 0)
+      {
+         candidate = *it;
+         success = true;
+      }
+      it++;
+      i++;
+   }
+   if (success)
+   {
+      cellInfo.mdelCandidates.erase(candidate);
+      atomOff(candidate);
+   }
+   return success;
+}
+
 int Atom::getNumBonds() const
 {
    int numBond = 0;
@@ -372,9 +395,17 @@ void Atom::genAngleList()
    }
 }
 
-void Atom::genDelList()
+void Atom::genBondDelList()
 {
    cellInfo.moffCandidates = cellInfo.mbonds;
+}
+
+void Atom::genAtomDelList()
+{
+   for (unsigned int i=0; i<atomList.size(); i++)
+   {
+      cellInfo.mdelCandidates.insert(atomList[i]);
+   }
 }
 
 void Atom::bondOff(Bond target)
@@ -398,6 +429,16 @@ void Atom::bondOn(Bond target)
    }
 }
 
+void Atom::atomOff(Atom target)
+{
+   int i = target.getIndex();
+   for (int j=0; j<adjMatrix.columns(); j++)
+   {
+      if (adjMatrix.get(i,j) != 0)
+         adjMatrix.setSym(i,j,-1);
+   }
+}
+
 int Atom::getNumCoordX(int n)
 {
    int numCoordX = 0;
@@ -416,14 +457,28 @@ int Atom::delPercentBond(double percent, bool guideDel)
 {
    int numDelBonds = (int)(percent/100*cellInfo.nBonds());
    
-   cout << "Deleting Atoms..." << endl;
-   for (int i=0; i<numDelBonds;)
+   cout << "Deleting Bonds..." << endl;
+   for (int i=0; i<numDelBonds;i++)
    {
-      if (delRandBond(guideDel))
-         i++;
-      if (cellInfo.nCandidates() == 0)
+      delRandBond(guideDel);
+      if (cellInfo.nBondCandidates() == 0)
          break;
    }
    
-   return cellInfo.nCandidates();
+   return cellInfo.nBondCandidates();
+}
+
+int Atom::delPercentAtom(double percent)
+{
+   int numDelAtom = (int)(percent/100*atomList.size());
+   
+   cout << "Deleting Atoms..." << endl;
+   for (int i=0; i<numDelAtom;i++)
+   {
+      delRandAtom();
+      if (cellInfo.nAtomCandidates() == 0)
+         break;
+   }
+   
+   return cellInfo.nAtomCandidates();
 }

@@ -27,7 +27,8 @@ int main (int argc, char* argv[])
    int exBond = atoi(argv[2]);
    int cellFactor = atoi(argv[3]);
    double percentDelBonds = atof(argv[4]);
-   bool modDelete = !(bool)(strcmp(argv[5], "guide"));
+   bool atomNotBond = !(bool)(strcmp(argv[5], "atom"));
+   bool modDelete = !(bool)(strcmp(argv[6], "guide"));
    srand ( time(NULL) );
    time_t start = time(NULL);
 
@@ -41,9 +42,18 @@ int main (int argc, char* argv[])
   
    cout << "Deleting Atoms..." << endl;
    Atom::genBondList();
-   Atom::genDelList();
-   Atom::delPercentBond(percentDelBonds, modDelete);
+   if (atomNotBond)
+   {
+      Atom::genAtomDelList();
+      Atom::delPercentAtom(percentDelBonds);
+   }
+   else
+   {
+      Atom::genBondDelList();
+      Atom::delPercentBond(percentDelBonds, modDelete);
+   }
    Atom::genBondList();
+   Atom::genBondDelList();
    time_t deletions = time(NULL);
    cout << "Deletion time: " << difftime(time(NULL), connected) << endl;
    
@@ -58,7 +68,8 @@ int main (int argc, char* argv[])
    cout << "Num Coord 2: " << Atom::getNumCoordX(2) << endl;
    cout << "Num Coord 3: " << Atom::getNumCoordX(3) << endl;
    cout << "Num Coord 4: " << Atom::getNumCoordX(4) << endl;
-   cout << "Deletable Atoms: " << Atom::cellInfo.nCandidates() << endl;
+   cout << "Deletable Bonds: " << Atom::cellInfo.nBondCandidates() << endl;
+   cout << "Deletable Atoms: " << Atom::cellInfo.nAtomCandidates() << endl;
    cout << "Total time: " << difftime(time(NULL), start) << endl;
 
    return 0;

@@ -22,6 +22,7 @@ class Atom
       
       static void bondOff(Bond);
       static void bondOn(Bond);
+      static void atomOff(Atom);
 
    public:
       static std::vector<Atom> atomList;
@@ -34,9 +35,12 @@ class Atom
       static void outputAtoms(std::string);
       static void genBondList();
       static void genAngleList();
-      static void genDelList();
+      static void genAtomDelList();
+      static void genBondDelList();
       static bool delRandBond(bool);
+      static bool delRandAtom();
       static int delPercentBond(double, bool);
+      static int delPercentAtom(double);
       static int getNumCoordX(int);
 
       Atom();

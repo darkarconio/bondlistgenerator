@@ -28,7 +28,8 @@ class Parameters
       double mdist; //Optimal bond distance
       std::set<Bond> mbonds; //List of bonds
       std::set<Angle> mangles; //List of bonds
-      std::set<Bond> moffCandidates; //List of atom indexes that can be deleted from
+      std::set<Bond> moffCandidates; //List of bonds that can be deleted from
+      std::set<Atom> mdelCandidates; //List of atoms that can be deleted from
       void copy (const Parameters&);
 
    public:
@@ -49,7 +50,8 @@ class Parameters
       double volume() const {return fabs( mdim.tripleProduct() );}
       int nBonds () const {return mbonds.size();}
       int nAngles () const {return mangles.size();}
-      int nCandidates () const {return moffCandidates.size();}
+      int nBondCandidates () const {return moffCandidates.size();}
+      int nAtomCandidates () const {return mdelCandidates.size();}
       
       void pnt (int n) {mpnt = n; mvar = n*3;}
       void cxn (int n) {mcxn = n;}
