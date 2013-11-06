@@ -29,7 +29,7 @@ class Parameters
       std::set<Bond> mbonds; //List of bonds
       std::set<Angle> mangles; //List of bonds
       std::set<Bond> moffCandidates; //List of bonds that can be deleted from
-      std::set<Atom> mdelCandidates; //List of atoms that can be deleted from
+      std::set<Atom> mdelCandidates; //List of atoms that are bonded to the system
       void copy (const Parameters&);
 
    public:
