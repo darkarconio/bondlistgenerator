@@ -42,14 +42,14 @@ int main (int argc, char* argv[])
   
    cout << "Deleting Atoms..." << endl;
    Atom::genBondList();
+   Atom::genAtomDelList();
+   Atom::genBondDelList();
    if (atomNotBond)
    {
-      Atom::genAtomDelList();
       Atom::delPercentAtom(percentDelBonds);
    }
    else
    {
-      Atom::genBondDelList();
       Atom::delPercentBond(percentDelBonds, modDelete);
    }
    Atom::genBondList();
@@ -64,6 +64,7 @@ int main (int argc, char* argv[])
    Atom::outputAtoms(inputFile);
    Atom::cellInfo.writeBondLoc();
    
+   debug(Atom::cellInfo.nAtomCandidates())
    cout << "Average Coordination: " << 2*(double)Atom::cellInfo.nBonds()/(double)Atom::cellInfo.nAtomCandidates() << endl;
    cout << "Density: " << Atom::cellInfo.nAtomCandidates()/Atom::cellInfo.volume() << endl;
    cout << "Num Coord 2: " << Atom::getNumCoordX(2) << endl;
