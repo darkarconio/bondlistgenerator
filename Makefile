@@ -1,6 +1,6 @@
-CC=g++
+CC=icc
 VPATH=trunk
-CFLAGS=-Wall -ansi -I$(VPATH)# -std=c++0x
+CFLAGS=-O3 -Wall -ansi -I$(VPATH)# -std=c++0x
 LDFLAGS=
 
 all: generator
