@@ -1,0 +1,18 @@
+#!/bin/sh
+cellsize=4
+num_del=`seq 0 5 50`
+atom=bond
+guide=guide
+
+runjob()
+{
+   mkdir -p $PARALLEL_SEQ
+   cd $PARALLEL_SEQ
+   cp ../inputfiles/* .
+   echo `generator silicon 5 $1 $2 $3 $4 | awk '{ if (/^Density/) print $2; if (/^Average/) print $3; if (/^Num Coord (2|3|4)/) print $4 }'`
+   echo `lammps < in.elastic | awk '{ if (/^Elastic Constant C(11|22|33|12|13|23|44|55|66)/) { print $5 } }'`
+   cd ..
+   rm -r $PARALLEL_SEQ
+}
+export -f runjob
+parallel runjob ::: $cellsize ::: $num_del ::: $atom ::: $guide ::: {1..20}
