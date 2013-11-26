@@ -13,9 +13,11 @@ class Bond
       const Atom * b;
       static const int MIN_BOND = 2;
       static const int MIN_NEIGH_BOND = 3;
+      static const int FULL_BOND = 4;
       void copy (const Bond&);
    protected:
       friend class Angle;
+      friend class Atom;
       const Atom * otherAtom (const Atom * c) const {if (c == a) return b; else return a;}
    public:
       Bond (const Atom*, const Atom*);
@@ -24,7 +26,7 @@ class Bond
       bool operator< (const Bond&) const;
       int operator[] (unsigned int) const;
       Bond& operator= (const Bond& other) { copy(other); return *this; }
-      bool offCandidate(bool) const;
+      bool offCandidate(unsigned int) const;
       Point location() const;
 };
 

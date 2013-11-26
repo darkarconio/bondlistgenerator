@@ -28,7 +28,7 @@ int main (int argc, char* argv[])
    int cellFactor = atoi(argv[3]);
    double percentDelBonds = atof(argv[4]);
    bool atomNotBond = !(bool)(strcmp(argv[5], "atom"));
-   bool modDelete = !(bool)(strcmp(argv[6], "guide"));
+   unsigned int modDelete = abs(atoi(argv[6]));
    srand ( time(NULL) );
    time_t start = time(NULL);
 

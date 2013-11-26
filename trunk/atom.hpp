@@ -39,7 +39,7 @@ class Atom
       static void genBondDelList();
       static bool delRandBond(bool);
       static bool delRandAtom();
-      static int delPercentBond(double, bool);
+      static int delPercentBond(double, unsigned int);
       static int delPercentAtom(double);
       static int getNumCoordX(int);
 

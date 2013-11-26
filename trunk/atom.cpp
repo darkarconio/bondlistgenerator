@@ -453,7 +453,7 @@ int Atom::getNumCoordX(int n)
    return numCoordX;
 }
 
-int Atom::delPercentBond(double percent, bool guideDel)
+int Atom::delPercentBond(double percent, unsigned int guideDel)
 {
    int numDelBonds = (int)(percent/100*cellInfo.nBonds());
    
