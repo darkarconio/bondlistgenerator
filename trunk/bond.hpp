@@ -17,7 +17,6 @@ class Bond
       void copy (const Bond&);
    protected:
       friend class Angle;
-      friend class Atom;
       const Atom * otherAtom (const Atom * c) const {if (c == a) return b; else return a;}
    public:
       Bond (const Atom*, const Atom*);

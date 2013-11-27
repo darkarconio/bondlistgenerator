@@ -12,6 +12,7 @@ class Matrix3: public Matrix
       Matrix3 (double n) : Matrix(3,3,n) {}
       Matrix3 (const Matrix3& other) : Matrix(3,3) {copy(other);}
       Matrix3 (const Point&, const Point&, const Point&);
+      Matrix3 (const Point&);
       Matrix3 (const Matrix&);
       
       Matrix3 operator* (double n) const {Matrix3 product( Matrix::operator* (n)); return product;}

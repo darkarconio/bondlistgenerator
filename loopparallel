@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 cellsize=4
 num_del=`seq 0 5 50`
 atom=bond
-guide=guide
+guide=0
 
 runjob()
 {
@@ -17,4 +17,4 @@ runjob()
    rm -r $PARALLEL_SEQ
 }
 export -f runjob
-parallel runjob ::: $cellsize ::: $num_del ::: $atom ::: $guide ::: {1..20}
+parallel --gnu runjob ::: $cellsize ::: $num_del ::: $atom ::: $guide ::: {1..20}

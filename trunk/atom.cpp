@@ -6,6 +6,7 @@
 #include <fstream>
 
 #include <cstdlib>
+#include <cstdio>
 #include <ctime>
 
 #include <vector>
@@ -219,6 +220,83 @@ void Atom::readAtoms(string fileName)
    file.close();
 }
 
+void Atom::readMinAtoms(string fileName)
+{
+   string buffer;
+   fstream file (fileName.c_str(), fstream::in | fstream::out);
+   double x,y,z,x2,y2,z2;
+   int nAtoms, nBonds, nAngles;
+   int i,a,b,c,n;
+   Point tmp;
+   
+   //Read loop sizes
+   getline(file, buffer);
+   getline(file, buffer);
+   file >> nAtoms >> buffer >> buffer;
+   getline(file, buffer);
+   file >> nBonds >> buffer >> buffer;
+   getline(file, buffer);
+   file >> nAngles >> buffer >> buffer;
+   getline(file, buffer);
+   
+   //Read cell size
+   getline(file, buffer);
+   file >> x2 >> x >> buffer >> buffer;
+   file >> y2 >> y >> buffer >> buffer;
+   file >> z2 >> z >> buffer >> buffer;
+   tmp.x(x-x2);
+   tmp.y(y-y2);
+   tmp.z(z-z2);
+   cellInfo.setDim(Matrix3(tmp));
+   
+   //Skip over unneeded lines
+   while (getline(file,buffer))
+   {
+      if (buffer.compare("Atoms # molecular") == 0)
+         break;
+   }
+
+   getline(file, buffer);
+   for (i=0; i<nAtoms; i++)
+   {
+      file >> n >> buffer >> buffer >> x >> y >> z >> buffer >> buffer >> buffer;
+      tmp.x(x);
+      tmp.y(y);
+      tmp.z(z);
+      Atom newAtom(tmp, i);
+      atomList.push_back(newAtom);
+   }
+   
+   //Skip over unneeded lines
+   while (getline(file,buffer))
+   {
+      if (buffer.compare("Bonds") == 0)
+         break;
+   }
+
+   getline(file, buffer);
+   for (i=0; i<nBonds; i++)
+   {
+      file >> n >> buffer >> a >> b;
+      cellInfo.mbonds.insert(Bond(&atomList[a-1], &atomList[b-1]) );
+   }
+
+   //Skip over unneeded lines
+   while (getline(file,buffer))
+   {
+      if (buffer.compare("Angles") == 0)
+         break;
+   }
+
+   getline(file, buffer);
+   for (i=0; i<nAngles; i++)
+   {
+      file >> n >> buffer >> a >> b >> c;
+      cellInfo.mangles.insert( Angle( &atomList[a-1], &atomList[b-1], &atomList[c-1]) );
+   }
+   file.close();
+}
+
 //Assumes atom connections will be generated afterwards
 void Atom::multiplyCell(Point n)
 {
@@ -275,7 +353,6 @@ void Atom::connectAtoms(int target)
    int nBond = 0;
    cellInfo.cxn(0);
    double cellDist;
-   double epsilon = 1e-8;
    
    cellInfo.dist( fabs( (atomList[0].getPos() - atomList[target].getPos()).distance() ) );
    
@@ -289,7 +366,7 @@ void Atom::connectAtoms(int target)
          b = atomList[j].getPos();
          cellDist = fabs( (cellInfo.getRealDiff(a,b)).distance());
 
-         if ( fabs(cellDist - cellInfo.dist()) < epsilon)
+         if ( fabs(cellDist - cellInfo.dist()) < EPSILON)
          {
             atomList[i].setNeighbour(&atomList[j]);
             adjMatrix.setSym(i,j,1);

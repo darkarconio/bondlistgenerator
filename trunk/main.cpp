@@ -24,6 +24,13 @@ Parameters Atom::cellInfo = Parameters();
 int main (int argc, char* argv[])
 {
    string inputFile = argv[1];
+   if (inputFile.compare("data.min") == 0)
+   {
+      Atom::readMinAtoms(inputFile);
+      Atom::cellInfo.writeBondLoc();
+      return 0;
+   }
+
    int exBond = atoi(argv[2]);
    int cellFactor = atoi(argv[3]);
    double percentDelBonds = atof(argv[4]);

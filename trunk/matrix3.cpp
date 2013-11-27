@@ -24,6 +24,11 @@ Matrix3::Matrix3 (const Matrix& other) : Matrix(3,3)
    }
    copy(other);
 }
+
+Matrix3::Matrix3 (const Point& other) : Matrix(3,3)
+{
+   setDiag(other);
+}
       
 void Matrix3::setPoint (const Point& other, int n)
 {

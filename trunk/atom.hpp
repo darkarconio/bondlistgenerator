@@ -24,12 +24,14 @@ class Atom
       static void bondOn(Bond);
       static void atomOff(Atom);
 
+      static const double EPSILON = 1e-8;
    public:
       static std::vector<Atom> atomList;
       static Matrix adjMatrix;
       static Parameters cellInfo; //vectors defining cell Atom is found in
 
       static void readAtoms(std::string);
+      static void readMinAtoms(std::string);
       static void multiplyCell(Point);
       static void connectAtoms(int);
       static void outputAtoms(std::string);
