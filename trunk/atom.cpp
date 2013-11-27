@@ -263,6 +263,7 @@ void Atom::readMinAtoms(string fileName)
       tmp.x(x);
       tmp.y(y);
       tmp.z(z);
+      cellInfo.checkPeriodBound(tmp); //Shifts a point back into the cell if the optimization moves it outside
       Atom newAtom(tmp, i);
       atomList.push_back(newAtom);
    }
