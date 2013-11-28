@@ -60,7 +60,8 @@ class Parameters
       void setDim (const Matrix3&);
       void delRandBond (std::vector<Atom>&, int);
       void genDelList (std::vector<Atom>&);
-
+      
+      void printCellDim() const;
       void writeBondLoc() const;
 
       Parameters& operator= (const Parameters& other) {copy(other); return *this;}

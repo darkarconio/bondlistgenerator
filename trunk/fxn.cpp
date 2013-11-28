@@ -180,3 +180,10 @@ void Parameters::setDim (const Matrix3& other)
    for (int i=0; i<3; i++)
       mlen.setCoord( other.getPoint(i).distance(), i );
 }
+
+void Parameters::printCellDim () const
+{
+   cout << "0 " << mdim.get(0,0);
+   cout << " 0 " << mdim.get(1,1);
+   cout << " 0 " << mdim.get(2,2);
+}

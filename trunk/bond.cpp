@@ -1,6 +1,7 @@
 #include <atom.hpp>
 #include <bond.hpp>
 #include <fxn.hpp>
+#include <iostream>
 
 Bond::Bond (const Atom* c, const Atom* d)
 {
@@ -41,12 +42,18 @@ int Bond::operator[] (unsigned int i) const
 bool Bond::offCandidate(unsigned int guideDel) const
 {
    if (guideDel == 0)
+   {
       return (a->getNumBonds() > MIN_BOND && b->getNumBonds() > MIN_BOND);
+   }
    else if (guideDel == 1)
+   {
       return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_BOND) ||
              (b->getNumBonds() > MIN_NEIGH_BOND && a->getNumBonds() > MIN_BOND);
+   }
    else if (guideDel == 2)
+   {
       return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_NEIGH_BOND);
+   }
    else
    {
       if (Atom::getNumCoordX(FULL_BOND) > Atom::getNumCoordX(MIN_NEIGH_BOND))

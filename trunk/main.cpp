@@ -28,6 +28,7 @@ int main (int argc, char* argv[])
    {
       Atom::readMinAtoms(inputFile);
       Atom::cellInfo.writeBondLoc();
+      Atom::cellInfo.printCellDim();
       return 0;
    }
 

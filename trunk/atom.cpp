@@ -84,7 +84,7 @@ void Atom::delNeighbour(int num)
    neighbours.erase(neighbours.begin()+num);
 }
 
-bool Atom::delRandBond(bool guideDel)
+bool Atom::delRandBond(unsigned int guideDel)
 {
    Bond candidate(*(cellInfo.moffCandidates.begin()));
    int i = 1;
