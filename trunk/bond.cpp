@@ -54,6 +54,13 @@ bool Bond::offCandidate(unsigned int guideDel) const
    {
       return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_NEIGH_BOND);
    }
+   else if (guideDel == 3)
+   {
+      if (Atom::getNumCoordX(FULL_BOND) > Atom::getNumCoordX(MIN_NEIGH_BOND))
+         return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_NEIGH_BOND);
+      else
+         return (a->getNumBonds() > MIN_BOND && b->getNumBonds() > MIN_BOND);
+   }
    else
    {
       if (Atom::getNumCoordX(FULL_BOND) > Atom::getNumCoordX(MIN_NEIGH_BOND)*5)
