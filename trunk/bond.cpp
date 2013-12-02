@@ -70,6 +70,44 @@ bool Bond::offCandidate(unsigned int guideDel) const
    }
 }
 
+bool Bond::offCandidate (unsigned int guideDel, double dist) const
+{
+   Point loc = location();
+   Point mid = a->cellInfo.midpoint();
+
+   if (a->cellInfo.getRealDiff(loc, mid).distance() > dist)
+      return (false);
+
+   if (guideDel == 0)
+   {
+      return (a->getNumBonds() > MIN_BOND && b->getNumBonds() > MIN_BOND);
+   }
+   else if (guideDel == 1)
+   {
+      return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_BOND) ||
+             (b->getNumBonds() > MIN_NEIGH_BOND && a->getNumBonds() > MIN_BOND);
+   }
+   else if (guideDel == 2)
+   {
+      return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_NEIGH_BOND);
+   }
+   else if (guideDel == 3)
+   {
+      if (Atom::getNumCoordX(FULL_BOND) > Atom::getNumCoordX(MIN_NEIGH_BOND))
+         return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_NEIGH_BOND);
+      else
+         return (a->getNumBonds() > MIN_BOND && b->getNumBonds() > MIN_BOND);
+   }
+   else
+   {
+      if (Atom::getNumCoordX(FULL_BOND) > Atom::getNumCoordX(MIN_NEIGH_BOND)*5)
+         return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_NEIGH_BOND);
+      else
+         return (a->getNumBonds() > MIN_BOND && b->getNumBonds() > MIN_BOND);
+   }
+}
+
+
 Point Bond::location() const
 {
    Point locA = a->getPos();

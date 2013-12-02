@@ -34,9 +34,10 @@ int main (int argc, char* argv[])
 
    int exBond = atoi(argv[2]);
    int cellFactor = atoi(argv[3]);
-   double percentDelBonds = atof(argv[4]);
-   bool atomNotBond = !(bool)(strcmp(argv[5], "atom"));
+   double percentDel = abs(atof(argv[4]));
+   bool atomDel = !(bool)(strcmp(argv[5], "atom"));
    unsigned int modDelete = abs(atoi(argv[6]));
+   double delDist = abs(atof(argv[7]));
    srand ( time(NULL) );
    time_t start = time(NULL);
 
@@ -52,13 +53,16 @@ int main (int argc, char* argv[])
    Atom::genBondList();
    Atom::genAtomDelList();
    Atom::genBondDelList();
-   if (atomNotBond)
+   if (atomDel)
    {
-      Atom::delPercentAtom(percentDelBonds);
+      Atom::delPercentAtom(percentDel);
    }
    else
    {
-      Atom::delPercentBond(percentDelBonds, modDelete);
+      if (delDist == 0)
+         Atom::delPercentBond(percentDel, modDelete);
+      else
+         Atom::delPercentBond(percentDel, modDelete, delDist);
    }
    Atom::genBondList();
    Atom::genBondDelList();

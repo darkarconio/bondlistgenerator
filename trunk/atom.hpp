@@ -40,8 +40,10 @@ class Atom
       static void genAtomDelList();
       static void genBondDelList();
       static bool delRandBond(unsigned int);
+      static bool delRandBond(unsigned int, double);
       static bool delRandAtom();
       static int delPercentBond(double, unsigned int);
+      static int delPercentBond(double, unsigned int, double);
       static int delPercentAtom(double);
       static int getNumCoordX(int);
 

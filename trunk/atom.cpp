@@ -112,6 +112,34 @@ bool Atom::delRandBond(unsigned int guideDel)
    return success;
 }
 
+bool Atom::delRandBond(unsigned int guideDel, double delDist)
+{
+   Bond candidate(*(cellInfo.moffCandidates.begin()));
+   int i = 1;
+   bool success = false;
+   for (set<Bond>::iterator it=cellInfo.moffCandidates.begin(); it!=cellInfo.moffCandidates.end();)
+   {
+      if (!it->offCandidate(guideDel, delDist))
+      {
+         cellInfo.moffCandidates.erase(*it++);
+         continue;
+      }
+      if (rand() % i == 0)
+      {
+         candidate = *it;
+         success = true;
+      }
+      it++;
+      i++;
+   }
+   if (success)
+   {
+      cellInfo.moffCandidates.erase(candidate);
+      bondOff(candidate);
+   }
+   return success;
+}
+
 bool Atom::delRandAtom()
 {
    Atom candidate(*(cellInfo.mdelCandidates.begin()));
@@ -539,6 +567,21 @@ int Atom::delPercentBond(double percent, unsigned int guideDel)
    for (int i=0; i<numDelBonds;i++)
    {
       delRandBond(guideDel);
+      if (cellInfo.nBondCandidates() == 0)
+         break;
+   }
+   
+   return cellInfo.nBondCandidates();
+}
+
+int Atom::delPercentBond(double percent, unsigned int guideDel, double delDist)
+{
+   int numDelBonds = (int)(percent/100*cellInfo.nBonds());
+   
+   cout << "Deleting Bonds..." << endl;
+   for (int i=0; i<numDelBonds;i++)
+   {
+      delRandBond(guideDel, delDist);
       if (cellInfo.nBondCandidates() == 0)
          break;
    }

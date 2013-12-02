@@ -52,6 +52,7 @@ class Parameters
       int nAngles () const {return mangles.size();}
       int nBondCandidates () const {return moffCandidates.size();}
       int nAtomCandidates () const {return mdelCandidates.size();}
+      Point midpoint () const {return (dim(0)/2 + dim(1)/2 + dim(2)/2);}
       
       void pnt (int n) {mpnt = n; mvar = n*3;}
       void cxn (int n) {mcxn = n;}

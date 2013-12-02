@@ -7,7 +7,7 @@ Input:
 An xsf file with the structure info
 
 Running the Program to generator lammps input:
-generator [input file] [equilibrium bond length] [multiplication factor for the input cell] [% bonds to be deleted] ["atom" or "bond" being deleted] [level of deletion guide 0-3]
+generator [input file] [equilibrium bond length] [multiplication factor for the input cell] [% bonds to be deleted] ["atom" or "bond" being deleted] [level of deletion guide 0-4] [radius of allow deletion (0 off)]
 
 To process lammps output:
 generator data.min 
