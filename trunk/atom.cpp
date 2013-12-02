@@ -559,6 +559,27 @@ int Atom::getNumCoordX(int n)
    return numCoordX;
 }
 
+int Atom::getCoordXNeighBond(int n)
+{
+   int numNeighBond = 0;
+   int numNeigh = 0;
+   for (unsigned int i=0; i<atomList.size(); i++)
+   {
+      if (atomList[i].getNumBonds() == n)
+      {
+         for (int j=0; j<adjMatrix.columns(); j++)
+         {
+            if (adjMatrix.get(i,j) == 1)
+            {
+               numNeighBond += atomList[j].getNumBonds();
+               numNeigh += 1;
+            }
+         }
+      }
+   }
+   return numNeighBond/numNeigh;
+}
+
 int Atom::delPercentBond(double percent, unsigned int guideDel)
 {
    int numDelBonds = (int)(percent/100*cellInfo.nBonds());

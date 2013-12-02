@@ -79,8 +79,11 @@ int main (int argc, char* argv[])
    cout << "Average Coordination: " << 2*(double)Atom::cellInfo.nBonds()/(double)Atom::cellInfo.nAtomCandidates() << endl;
    cout << "Density: " << Atom::cellInfo.nAtomCandidates()/Atom::cellInfo.volume() << endl;
    cout << "Num Coord 2: " << Atom::getNumCoordX(2) << endl;
+   cout << "Avg Coord 2 Neighbour Coord: " << Atom::getCoordXNeighBond(2) << endl;
    cout << "Num Coord 3: " << Atom::getNumCoordX(3) << endl;
+   cout << "Avg Coord 3 Neighbour Coord: " << Atom::getCoordXNeighBond(3) << endl;
    cout << "Num Coord 4: " << Atom::getNumCoordX(4) << endl;
+   cout << "Avg Coord 4 Neighbour Coord: " << Atom::getCoordXNeighBond(4) << endl;
    cout << "Deletable Bonds: " << Atom::cellInfo.nBondCandidates() << endl;
    cout << "Deletable Atoms: " << Atom::cellInfo.nAtomCandidates() << endl;
    cout << "Total time: " << difftime(time(NULL), start) << endl;
