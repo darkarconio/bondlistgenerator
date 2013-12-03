@@ -98,3 +98,8 @@ Point Point::xyzBasis (const Matrix3& basis) const
    
    return xyzPt;
 }
+
+double Point::average () const
+{
+   return (x() + y() + z())/3;
+}

@@ -70,10 +70,11 @@ bool Bond::offCandidate(unsigned int guideDel) const
    }
 }
 
-bool Bond::offCandidate (unsigned int guideDel, double dist) const
+bool Bond::offCandidate (unsigned int guideDel, double distPercent) const
 {
    Point loc = location();
    Point mid = a->cellInfo.midpoint();
+   double dist = distPercent/200*a->cellInfo.len().average();
 
    if (a->cellInfo.getRealDiff(loc, mid).distance() > dist)
       return (false);
