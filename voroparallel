@@ -3,20 +3,32 @@ cellsize=4
 num_del=`seq 0 5 50`
 atom=bond
 guide=0
+deldist=0
 
 runjob()
 {
-   mkdir -p $PARALLEL_SEQ
-   cd $PARALLEL_SEQ
+   mkdir -p $PARALLEL_PID$PARALLEL_SEQ
+   cd $PARALLEL_PID$PARALLEL_SEQ
    cp ../inputfiles/* .
-   input=`generator silicon 5 $1 $2 $3 $4 | awk '{ if (/^Density/) print $2; if (/^Average/) print $3; if (/^Num Coord (2|3|4)/) print $4 }'`
+   input=`generator silicon 5 $1 $2 $3 $4 $5 | awk '{ if (/^Density/) print $2; if (/^Average/) print $3; if (/^Num Coord (2|3|4)/) print $4 }'`
    results=`lammps < in.elastic | awk '{ if (/^Elastic Constant C(11|22|33|12|13|23|44|55|66)/) { print $5 } }'`
    lammps=$input' '$results
-   voro=`generator data.min`' bondloc.out'
-   output=`voro++ -p $voro`
+   voroin=`generator data.min`' bondloc.out'
+   vorout=`voro++ -p $voroin`
+   output=`cat bondloc.out.vol | awk '{ print $5 }'`
+   echo $voro
    echo $output
    cd ..
-   rm -r $PARALLEL_SEQ
+   rm -r $PARALLEL_PID$PARALLEL_SEQ
 }
 export -f runjob
-parallel --gnu runjob ::: $cellsize ::: $num_del ::: $atom ::: $guide ::: {1..20}
+parallel --gnu runjob ::: $cellsize ::: $num_del ::: $atom ::: $guide ::: $deldist ::: {1..20}
+rm -r 1*
+rm -r 2*
+rm -r 3*
+rm -r 4*
+rm -r 5*
+rm -r 6*
+rm -r 7*
+rm -r 8*
+rm -r 9*
