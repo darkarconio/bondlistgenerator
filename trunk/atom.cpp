@@ -559,7 +559,7 @@ int Atom::getNumCoordX(int n)
    return numCoordX;
 }
 
-int Atom::getCoordXNeighBond(int n)
+double Atom::getCoordXNeighBond(int n)
 {
    int numNeighBond = 0;
    int numNeigh = 0;
@@ -577,7 +577,7 @@ int Atom::getCoordXNeighBond(int n)
          }
       }
    }
-   return numNeighBond/numNeigh;
+   return (double)numNeighBond/(double)numNeigh;
 }
 
 int Atom::delPercentBond(double percent, unsigned int guideDel)

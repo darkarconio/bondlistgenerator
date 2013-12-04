@@ -10,7 +10,7 @@ runjob()
    mkdir -p $PARALLEL_PID$PARALLEL_SEQ
    cd $PARALLEL_PID$PARALLEL_SEQ
    cp ../inputfiles/* .
-   input=`generator silicon 5 $1 $2 $3 $4 $5 | awk '{ if (/^Density/) print $2; if (/^Average/) print $3; if (/^Num Coord (2|3|4)/) print $4 }'`
+   input=`generator silicon 5 $1 $2 $3 $4 $5 | awk '{ if (/^Density/) print $2; if (/^Average/) print $3; if (/^Num Coord (2|3|4)/) print $4; if (/^Avg Coord/) print $6 }'`
    results=`lammps < in.elastic | awk '{ if (/^Elastic Constant C(11|22|33|12|13|23|44|55|66)/) { print $5 } }'`
    lammps=$input' '$results
    voroin=`generator data.min`' bondloc.out'

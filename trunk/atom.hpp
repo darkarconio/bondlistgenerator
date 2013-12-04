@@ -46,7 +46,7 @@ class Atom
       static int delPercentBond(double, unsigned int, double);
       static int delPercentAtom(double);
       static int getNumCoordX(int);
-      static int getCoordXNeighBond(int);
+      static double getCoordXNeighBond(int);
 
       Atom();
       Atom(const Point&, int);
