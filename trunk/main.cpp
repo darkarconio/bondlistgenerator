@@ -26,8 +26,13 @@ int main (int argc, char* argv[])
    string inputFile = argv[1];
    if (inputFile.compare("data.min") == 0)
    {
+      bool bondLoc = !(bool)(strcmp(argv[2], "bond"));
       Atom::readMinAtoms(inputFile);
-      Atom::cellInfo.writeBondLoc();
+      Atom::genAtomDelList();
+      if (bondLoc)
+         Atom::cellInfo.writeBondLoc();
+      else
+         Atom::cellInfo.writeAtomLoc();
       Atom::cellInfo.printCellDim();
       return 0;
    }

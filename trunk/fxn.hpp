@@ -45,6 +45,7 @@ class Parameters
       Point len () const {return mlen;}
       const std::set<Bond>& bonds () const {return mbonds;}
       const std::set<Angle>& angles () const {return mangles;}
+      const std::set<Atom>& atoms () const {return mdelCandidates;}
       Point dim (int n) const {return mdim.getPoint(n);}
       const Matrix3& dim () const {return mdim;}
       double volume() const {return fabs( mdim.tripleProduct() );}
@@ -64,6 +65,7 @@ class Parameters
       
       void printCellDim() const;
       void writeBondLoc() const;
+      void writeAtomLoc() const;
 
       Parameters& operator= (const Parameters& other) {copy(other); return *this;}
       

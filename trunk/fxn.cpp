@@ -146,6 +146,18 @@ void Parameters::writeBondLoc() const
    }
 }
 
+void Parameters::writeAtomLoc() const
+{
+   int i=0;
+   set<Atom>::const_iterator it;
+   fstream file ( "atomloc.out", fstream::in | fstream::out | fstream::trunc);
+
+   for (it=mdelCandidates.begin();it!=mdelCandidates.end();++it)
+   {
+      file << ++i << ' ' << it->getPos().x() << ' ' << it->getPos().y() << ' ' << it->getPos().z() << endl;
+   }
+}
+
 void Parameters::strain(const Point & strain)
 {
    Matrix3 strainTensor;

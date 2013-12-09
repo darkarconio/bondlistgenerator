@@ -414,6 +414,7 @@ void Atom::outputAtoms(string fileName)
    int i;
    set<Bond>::const_iterator it;
    set<Angle>::const_iterator it2;
+   set<Atom>::const_iterator it3;
    fstream file ( (fileName.append(".out")).c_str(), fstream::in | fstream::out | fstream::trunc);
    
    file << fileName << endl << endl;
@@ -439,11 +440,17 @@ void Atom::outputAtoms(string fileName)
 
    file << "Atoms" << endl << endl;
 
-   for (i=0;i<cellInfo.pnt();i++)
+   i = 0;
+   for (it3=cellInfo.atoms().begin();it3!=cellInfo.atoms().end();++it3)
+   {
+      file << ++i << " 1 1 " << it3->getPos().x() << ' ' << it3->getPos().y() << ' ' << it3->getPos().z() << endl;
+   }
+   
+/*   for (i=0;i<cellInfo.pnt();i++)
    {
       file << i+1 << " 1 1 " << atomList[i].getPos('x') << " " << atomList[i].getPos('y') << " " 
            << atomList[i].getPos('z') << endl;
-   }
+   }*/
    
    file << endl << "Bonds" << endl << endl;
    
