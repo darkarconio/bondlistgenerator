@@ -3,6 +3,8 @@
 #include <fxn.hpp>
 #include <iostream>
 
+#define debug(x) std::cout << __LINE__ << ' ' << x << std::endl; std::cout.flush();
+
 Bond::Bond (const Atom* c, const Atom* d)
 {
    if (c > d)
@@ -41,33 +43,7 @@ int Bond::operator[] (unsigned int i) const
 
 bool Bond::offCandidate(unsigned int guideDel) const
 {
-   if (guideDel == 0)
-   {
-      return (a->getNumBonds() > MIN_BOND && b->getNumBonds() > MIN_BOND);
-   }
-   else if (guideDel == 1)
-   {
-      return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_BOND) ||
-             (b->getNumBonds() > MIN_NEIGH_BOND && a->getNumBonds() > MIN_BOND);
-   }
-   else if (guideDel == 2)
-   {
-      return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_NEIGH_BOND);
-   }
-   else if (guideDel == 3)
-   {
-      if (Atom::getNumCoordX(FULL_BOND) > Atom::getNumCoordX(MIN_NEIGH_BOND))
-         return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_NEIGH_BOND);
-      else
-         return (a->getNumBonds() > MIN_BOND && b->getNumBonds() > MIN_BOND);
-   }
-   else
-   {
-      if (Atom::getNumCoordX(FULL_BOND) > Atom::getNumCoordX(MIN_NEIGH_BOND)*5)
-         return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_NEIGH_BOND);
-      else
-         return (a->getNumBonds() > MIN_BOND && b->getNumBonds() > MIN_BOND);
-   }
+   return guideCriteria(guideDel);
 }
 
 bool Bond::offCandidate (unsigned int guideDel, double distPercent) const
@@ -78,7 +54,20 @@ bool Bond::offCandidate (unsigned int guideDel, double distPercent) const
 
    if (a->cellInfo.getRealDiff(loc, mid).distance() > dist)
       return (false);
+   
+   return guideCriteria(guideDel);
+}
 
+
+Point Bond::location() const
+{
+   Point locA = a->getPos();
+   Point locB = b->getPos();
+   return a->cellInfo.getRealAvg(locA, locB);
+}
+
+bool Bond::guideCriteria(unsigned int guideDel) const
+{
    if (guideDel == 0)
    {
       return (a->getNumBonds() > MIN_BOND && b->getNumBonds() > MIN_BOND);
@@ -114,12 +103,4 @@ bool Bond::offCandidate (unsigned int guideDel, double distPercent) const
          return (a->getNumBonds() > MIN_NEIGH_BOND && b->getNumBonds() > MIN_BOND) ||
                 (b->getNumBonds() > MIN_NEIGH_BOND && a->getNumBonds() > MIN_BOND);
    }
-}
-
-
-Point Bond::location() const
-{
-   Point locA = a->getPos();
-   Point locB = b->getPos();
-   return a->cellInfo.getRealAvg(locA, locB);
 }
