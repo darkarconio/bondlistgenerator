@@ -378,12 +378,13 @@ void Atom::connectAtoms(int target)
 {
    int size = atomList.size();
    adjMatrix = Matrix(size);
-   Point a,b;
+   Point a = atomList[0].getPos();
+   Point b = atomList[target].getPos();
    int nBond = 0;
    cellInfo.cxn(0);
    double cellDist;
    
-   cellInfo.dist( fabs( (atomList[0].getPos() - atomList[target].getPos()).distance() ) );
+   cellInfo.dist( fabs( ( cellInfo.getRealDiff(a,b) ).distance() ) );
    
    for (int i=0; i<size; i++)
    {
