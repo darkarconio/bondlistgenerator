@@ -109,6 +109,7 @@ bool Atom::delRandBond(unsigned int guideDel)
       cellInfo.moffCandidates.erase(candidate);
       bondOff(candidate);
    }
+   debug(success)
    return success;
 }
 
@@ -591,12 +592,18 @@ double Atom::getCoordXNeighBond(int n)
 int Atom::delPercentBond(double percent, unsigned int guideDel)
 {
    int numDelBonds = (int)(percent/100*cellInfo.nBonds());
+   bool repeat = false;
    
    cout << "Deleting Bonds..." << endl;
    for (int i=0; i<numDelBonds;i++)
    {
       delRandBond(guideDel);
-      if (cellInfo.nBondCandidates() == 0)
+      if (cellInfo.nBondCandidates() == 0 && !repeat)
+      {
+         genBondDelList();
+         repeat = true;
+      }
+      else if (cellInfo.nBondCandidates() == 0 && repeat)
          break;
    }
    
@@ -606,12 +613,18 @@ int Atom::delPercentBond(double percent, unsigned int guideDel)
 int Atom::delPercentBond(double percent, unsigned int guideDel, double delDist)
 {
    int numDelBonds = (int)(percent/100*cellInfo.nBonds());
+   bool repeat = false;
    
-   cout << "Deleting Bonds..." << endl;
+   cout << "Deleting Bonds Radially..." << endl;
    for (int i=0; i<numDelBonds;i++)
    {
       delRandBond(guideDel, delDist);
       if (cellInfo.nBondCandidates() == 0)
+      {
+         genBondDelList();
+         repeat = true;
+      }
+      else if (cellInfo.nBondCandidates() == 0 && repeat)
          break;
    }
    

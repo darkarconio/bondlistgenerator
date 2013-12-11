@@ -70,7 +70,6 @@ int main (int argc, char* argv[])
          Atom::delPercentBond(percentDel, modDelete, delDist);
    }
    Atom::genBondList();
-   Atom::genBondDelList();
    time_t deletions = time(NULL);
    cout << "Deletion time: " << difftime(time(NULL), connected) << endl;
    
@@ -89,6 +88,7 @@ int main (int argc, char* argv[])
    cout << "Avg Coord 3 Neighbour Coord: " << Atom::getCoordXNeighBond(3) << endl;
    cout << "Num Coord 4: " << Atom::getNumCoordX(4) << endl;
    cout << "Avg Coord 4 Neighbour Coord: " << Atom::getCoordXNeighBond(4) << endl;
+   cout << "Num Bonds: " << Atom::cellInfo.nBonds() << endl;
    cout << "Deletable Bonds: " << Atom::cellInfo.nBondCandidates() << endl;
    cout << "Deletable Atoms: " << Atom::cellInfo.nAtomCandidates() << endl;
    cout << "Total time: " << difftime(time(NULL), start) << endl;
