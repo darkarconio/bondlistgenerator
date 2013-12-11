@@ -148,6 +148,11 @@ bool Atom::delRandAtom()
    bool success = false;
    for (set<Atom>::iterator it=cellInfo.mdelCandidates.begin(); it!=cellInfo.mdelCandidates.end();)
    {
+      if (!it->delCandidate())
+      {
+         cellInfo.mdelCandidates.erase(*it++);
+         continue;
+      }
       if (rand() % i == 0)
       {
          candidate = *it;
@@ -159,9 +164,21 @@ bool Atom::delRandAtom()
    if (success)
    {
       cellInfo.mdelCandidates.erase(candidate);
-      atomOff(candidate);
+      candidate.atomOff();
    }
    return success;
+}
+
+bool Atom::delCandidate() const
+{
+   bool candidate = true;
+   for (int i=0; i<adjMatrix.columns(); i++)
+   {
+      if (adjMatrix.get(atomIndex,i) == 1)
+         if (atomList[i].getNumBonds() <= Bond::MIN_BOND)
+            candidate = false;
+   }
+   return candidate;
 }
 
 int Atom::getNumBonds() const
@@ -544,9 +561,9 @@ void Atom::bondOn(Bond target)
    }
 }
 
-void Atom::atomOff(Atom target)
+void Atom::atomOff()
 {
-   int i = target.getIndex();
+   int i = atomIndex;
    for (int j=0; j<adjMatrix.columns(); j++)
    {
       if (adjMatrix.get(i,j) != 0)

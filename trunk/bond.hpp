@@ -16,6 +16,7 @@ class Bond
       static const int FULL_BOND = 4;
       void copy (const Bond&);
       bool guideCriteria(unsigned int) const;
+      friend class Atom;
    protected:
       friend class Angle;
       const Atom * otherAtom (const Atom * c) const {if (c == a) return b; else return a;}

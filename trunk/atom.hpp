@@ -22,7 +22,7 @@ class Atom
       
       static void bondOff(Bond);
       static void bondOn(Bond);
-      static void atomOff(Atom);
+      void atomOff();
 
       static const double EPSILON = 1e-8;
    public:
@@ -70,6 +70,7 @@ class Atom
       Atom* getNeighbour(int) const;
       int getIndex() const;
       int getNeighbourIndex(int) const;
+      bool delCandidate() const;
       
       Atom& operator=(const Atom& other) {copy(other); return *this;}
       bool operator==(const Atom& other) const {return atomIndex == other.atomIndex;}
