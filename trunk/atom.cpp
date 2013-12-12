@@ -175,8 +175,13 @@ bool Atom::delCandidate() const
    for (int i=0; i<adjMatrix.columns(); i++)
    {
       if (adjMatrix.get(atomIndex,i) == 1)
+      {
          if (atomList[i].getNumBonds() <= Bond::MIN_BOND)
+         {
             candidate = false;
+            break;
+         }
+      }
    }
    return candidate;
 }
@@ -190,6 +195,30 @@ int Atom::getNumBonds() const
          numBond += 1;
    }
    return numBond;
+}
+
+int Atom::getNumAtoms()
+{
+   int numAtom = 0;
+   Matrix column(adjMatrix.rows(),1);
+   double sum;
+   int n,i,j;
+   
+   for (i=0; i<adjMatrix.columns(); i++)
+   {
+      sum = 0;
+      column = adjMatrix.getCol(i);
+      for (j=0; j<adjMatrix.rows(); j++)
+      {
+         n = adjMatrix.get(j,i);
+         if (n >= 0)
+            sum += n;
+      }
+
+      if (sum > 0)
+         numAtom += 1;
+   }
+   return numAtom;
 }
 
 double Atom::getPos(char dimen) const
@@ -609,18 +638,18 @@ double Atom::getCoordXNeighBond(int n)
 int Atom::delPercentBond(double percent, unsigned int guideDel)
 {
    int numDelBonds = (int)(percent/100*cellInfo.nBonds());
-   bool repeat = false;
+   bool repeated = !(guideDel >= 3);
    
    cout << "Deleting Bonds..." << endl;
    for (int i=0; i<numDelBonds;i++)
    {
       delRandBond(guideDel);
-      if (cellInfo.nBondCandidates() == 0 && !repeat)
+      if (cellInfo.nBondCandidates() == 0 && !repeated)
       {
          genBondDelList();
-         repeat = true;
+         repeated = true;
       }
-      else if (cellInfo.nBondCandidates() == 0 && repeat)
+      else if (cellInfo.nBondCandidates() == 0 && repeated)
          break;
    }
    
@@ -630,18 +659,18 @@ int Atom::delPercentBond(double percent, unsigned int guideDel)
 int Atom::delPercentBond(double percent, unsigned int guideDel, double delDist)
 {
    int numDelBonds = (int)(percent/100*cellInfo.nBonds());
-   bool repeat = false;
+   bool repeated = !(guideDel >= 3);
    
    cout << "Deleting Bonds Radially..." << endl;
    for (int i=0; i<numDelBonds;i++)
    {
       delRandBond(guideDel, delDist);
-      if (cellInfo.nBondCandidates() == 0)
+      if (cellInfo.nBondCandidates() == 0 && !repeated)
       {
          genBondDelList();
-         repeat = true;
+         repeated = true;
       }
-      else if (cellInfo.nBondCandidates() == 0 && repeat)
+      else if (cellInfo.nBondCandidates() == 0 && repeated)
          break;
    }
    

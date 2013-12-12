@@ -6,8 +6,10 @@ make
 Input:
 An xsf file with the structure info
 
-Running the Program to generator lammps input:
-generator [input file] [equilibrium bond length] [multiplication factor for the input cell] [% bonds to be deleted] ["atom" or "bond" being deleted] [level of deletion guide 0-4] [radius of allow deletion (0 off)]
+Running the Program to generate lammps input:
+generator [input file] [equilibrium bond length] [multiplication factor for the input cell] [% bonds to be deleted] ["atom", "bond", or "both" being deleted] [level of deletion guide 0-6] [radius of allow deletion (0 off)] [optional: if "both" deleted, percent del for bonds]
+Output in [input file].out
 
-To process lammps output:
-generator data.min 
+To process lammps output for voronoi calc:
+generator data.min ["bond" or "atom" positions]
+Output in bondloc.out or atomloc.out

@@ -22,6 +22,7 @@ class Matrix
       int columns() const {return width;}
       int rows() const {return height;}
       Matrix getCol(int) const;
+      double getColSum(int) const;
       
       void set (int, int, double);
       void setAll (double);

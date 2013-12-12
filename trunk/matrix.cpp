@@ -204,3 +204,14 @@ Matrix Matrix::getCol(int n) const
    return column;
 }
 
+double Matrix::getColSum(int n) const
+{
+   Matrix column(getCol(n));
+   double sum = 0;
+   
+   for (int i=0; i<column.height; i++)
+   {
+      sum += column.get(i,0);
+   }
+   return sum;
+}

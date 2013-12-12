@@ -40,7 +40,7 @@ int main (int argc, char* argv[])
    int exBond = atoi(argv[2]);
    int cellFactor = atoi(argv[3]);
    double percentDel = abs(atof(argv[4]));
-   bool atomDel = !(bool)(strcmp(argv[5], "atom"));
+   string atomOrBond = argv[5];
    unsigned int modDelete = abs(atoi(argv[6]));
    double delDist = abs(atof(argv[7]));
    srand ( time(NULL) );
@@ -58,9 +58,15 @@ int main (int argc, char* argv[])
    Atom::genBondList();
    Atom::genAtomDelList();
    Atom::genBondDelList();
-   if (atomDel)
+   if (!(bool)atomOrBond.compare("atom"))
    {
       Atom::delPercentAtom(percentDel);
+   }
+   else if (!(bool)atomOrBond.compare("both"))
+   {
+      double percentDel2 = abs(atof(argv[8]));
+      Atom::delPercentAtom(percentDel);
+      Atom::delPercentBond(percentDel2, modDelete);
    }
    else
    {
@@ -90,6 +96,7 @@ int main (int argc, char* argv[])
    cout << "Avg Coord 4 Neighbour Coord: " << Atom::getCoordXNeighBond(4) << endl;
    cout << "Num Bonds: " << Atom::cellInfo.nBonds() << endl;
    cout << "Deletable Bonds: " << Atom::cellInfo.nBondCandidates() << endl;
+   cout << "Num Atoms: " << Atom::getNumAtoms() << endl;
    cout << "Deletable Atoms: " << Atom::cellInfo.nAtomCandidates() << endl;
    cout << "Total time: " << difftime(time(NULL), start) << endl;
 
