@@ -54,28 +54,35 @@ int main (int argc, char* argv[])
    time_t connected = time(NULL);
    cout << "Connecting time: " << difftime(time(NULL), start) << endl;
   
-   cout << "Deleting Atoms..." << endl;
-   Atom::genBondList();
-   Atom::genAtomDelList();
-   Atom::genBondDelList();
    if (!(bool)atomOrBond.compare("atom"))
    {
+      Atom::genAtomDelList();
       Atom::delPercentAtom(percentDel);
    }
    else if (!(bool)atomOrBond.compare("both"))
    {
       double percentDel2 = abs(atof(argv[8]));
+      
+      Atom::genAtomDelList();
       Atom::delPercentAtom(percentDel);
+      
+      Atom::genBondDelList(modDelete);
       Atom::delPercentBond(percentDel2, modDelete);
    }
    else
    {
+      Atom::genBondDelList(modDelete, delDist);
+   
       if (delDist == 0)
          Atom::delPercentBond(percentDel, modDelete);
       else
          Atom::delPercentBond(percentDel, modDelete, delDist);
    }
+   
    Atom::genBondList();
+   Atom::genBondDelList(modDelete, delDist);
+   Atom::genAtomDelList();
+   
    time_t deletions = time(NULL);
    cout << "Deletion time: " << difftime(time(NULL), connected) << endl;
    

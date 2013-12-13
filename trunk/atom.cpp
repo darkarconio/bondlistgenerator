@@ -84,33 +84,53 @@ void Atom::delNeighbour(int num)
    neighbours.erase(neighbours.begin()+num);
 }
 
-bool Atom::delRandBond(unsigned int guideDel)
+void Atom::genBondDelList(unsigned int guideDel)
 {
+   return genBondDelList(guideDel, 0);
+}
+
+void Atom::genBondDelList(unsigned int guideDel, double delDist)
+{
+   genBondList();
+   cellInfo.moffCandidates = cellInfo.mbonds;
+   
    Bond candidate(*(cellInfo.moffCandidates.begin()));
-   int i = 1;
-   bool success = false;
    for (set<Bond>::iterator it=cellInfo.moffCandidates.begin(); it!=cellInfo.moffCandidates.end();)
    {
-      if (!it->offCandidate(guideDel))
+//      debug(!it->offCandidate(guideDel, delDist))
+      if (!it->offCandidate(guideDel, delDist))
       {
          cellInfo.moffCandidates.erase(*it++);
-         continue;
       }
-      if (rand() % i == 0)
-      {
-         candidate = *it;
-         success = true;
-      }
-      it++;
-      i++;
+      else
+         it++;
    }
-   if (success)
+}
+
+void Atom::genAtomDelList()
+{
+   cellInfo.mdelCandidates.clear();
+   for (unsigned int i=0; i<atomList.size(); i++)
    {
-      cellInfo.moffCandidates.erase(candidate);
-      bondOff(candidate);
+      cellInfo.mdelCandidates.insert(atomList[i]);
    }
-   debug(success)
-   return success;
+   
+   Atom candidate(*(cellInfo.mdelCandidates.begin()));
+   for (set<Atom>::iterator it=cellInfo.mdelCandidates.begin(); it!=cellInfo.mdelCandidates.end();)
+   {
+      debug(!it->delCandidate())
+      if (!it->delCandidate())
+      {
+         cellInfo.mdelCandidates.erase(*it++);
+      }
+      else
+         it++;
+   }
+}
+
+bool Atom::delRandBond(unsigned int guideDel)
+{
+   return delRandBond(guideDel, 0);
 }
 
 bool Atom::delRandBond(unsigned int guideDel, double delDist)
@@ -120,6 +140,7 @@ bool Atom::delRandBond(unsigned int guideDel, double delDist)
    bool success = false;
    for (set<Bond>::iterator it=cellInfo.moffCandidates.begin(); it!=cellInfo.moffCandidates.end();)
    {
+      debug(!it->offCandidate(guideDel, delDist))
       if (!it->offCandidate(guideDel, delDist))
       {
          cellInfo.moffCandidates.erase(*it++);
@@ -556,19 +577,6 @@ void Atom::genAngleList()
    }
 }
 
-void Atom::genBondDelList()
-{
-   cellInfo.moffCandidates = cellInfo.mbonds;
-}
-
-void Atom::genAtomDelList()
-{
-   for (unsigned int i=0; i<atomList.size(); i++)
-   {
-      cellInfo.mdelCandidates.insert(atomList[i]);
-   }
-}
-
 void Atom::bondOff(Bond target)
 {
    int i = target[0];
@@ -637,37 +645,22 @@ double Atom::getCoordXNeighBond(int n)
 
 int Atom::delPercentBond(double percent, unsigned int guideDel)
 {
-   int numDelBonds = (int)(percent/100*cellInfo.nBonds());
-   bool repeated = !(guideDel >= 3);
-   
-   cout << "Deleting Bonds..." << endl;
-   for (int i=0; i<numDelBonds;i++)
-   {
-      delRandBond(guideDel);
-      if (cellInfo.nBondCandidates() == 0 && !repeated)
-      {
-         genBondDelList();
-         repeated = true;
-      }
-      else if (cellInfo.nBondCandidates() == 0 && repeated)
-         break;
-   }
-   
-   return cellInfo.nBondCandidates();
+   return delPercentBond(percent, guideDel, 0);
 }
 
 int Atom::delPercentBond(double percent, unsigned int guideDel, double delDist)
 {
    int numDelBonds = (int)(percent/100*cellInfo.nBonds());
    bool repeated = !(guideDel >= 3);
-   
-   cout << "Deleting Bonds Radially..." << endl;
+  
+   cout << "Deleting Bonds" << endl;
    for (int i=0; i<numDelBonds;i++)
    {
+  debug(numDelBonds) 
       delRandBond(guideDel, delDist);
       if (cellInfo.nBondCandidates() == 0 && !repeated)
       {
-         genBondDelList();
+         genBondDelList(guideDel, delDist);
          repeated = true;
       }
       else if (cellInfo.nBondCandidates() == 0 && repeated)

@@ -38,7 +38,8 @@ class Atom
       static void genBondList();
       static void genAngleList();
       static void genAtomDelList();
-      static void genBondDelList();
+      static void genBondDelList(unsigned int, double);
+      static void genBondDelList(unsigned int);
       static bool delRandBond(unsigned int);
       static bool delRandBond(unsigned int, double);
       static bool delRandAtom();
