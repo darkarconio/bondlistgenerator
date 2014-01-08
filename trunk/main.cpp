@@ -66,17 +66,13 @@ int main (int argc, char* argv[])
       Atom::genAtomDelList();
       Atom::delPercentAtom(percentDel);
       
-      Atom::genBondDelList(modDelete);
-      Atom::delPercentBond(percentDel2, modDelete);
+      Atom::genBondDelList(modDelete, delDist);
+      Atom::delPercentBond(percentDel2, modDelete, delDist);
    }
    else
    {
       Atom::genBondDelList(modDelete, delDist);
-   
-      if (delDist == 0)
-         Atom::delPercentBond(percentDel, modDelete);
-      else
-         Atom::delPercentBond(percentDel, modDelete, delDist);
+      Atom::delPercentBond(percentDel, modDelete, delDist);
    }
    
    Atom::genBondList();

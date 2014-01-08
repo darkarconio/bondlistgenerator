@@ -120,6 +120,8 @@ Parameters::Parameters()
    mbonds = set<Bond>();
    mangles = set<Angle>();
    moffCandidates = set<Bond>();
+   mdelCandidates = set<Atom>();
+   matoms = set<Atom>();
 }
 
 void Parameters::copy(const Parameters & other)
@@ -132,6 +134,8 @@ void Parameters::copy(const Parameters & other)
    moffCandidates = other.moffCandidates;
    mdim = other.mdim;
    mlen = other.mlen;
+   mdelCandidates = other.mdelCandidates;
+   matoms = other.matoms;
 }
 
 void Parameters::writeBondLoc() const
@@ -152,7 +156,7 @@ void Parameters::writeAtomLoc() const
    set<Atom>::const_iterator it;
    fstream file ( "atomloc.out", fstream::in | fstream::out | fstream::trunc);
 
-   for (it=mdelCandidates.begin();it!=mdelCandidates.end();++it)
+   for (it=matoms.begin();it!=matoms.end();++it)
    {
       file << ++i << ' ' << it->getPos().x() << ' ' << it->getPos().y() << ' ' << it->getPos().z() << endl;
    }

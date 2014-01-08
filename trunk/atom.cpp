@@ -108,11 +108,7 @@ void Atom::genBondDelList(unsigned int guideDel, double delDist)
 
 void Atom::genAtomDelList()
 {
-   cellInfo.mdelCandidates.clear();
-   for (unsigned int i=0; i<atomList.size(); i++)
-   {
-      cellInfo.mdelCandidates.insert(atomList[i]);
-   }
+   cellInfo.mdelCandidates = cellInfo.matoms;
    
    Atom candidate(*(cellInfo.mdelCandidates.begin()));
    for (set<Atom>::iterator it=cellInfo.mdelCandidates.begin(); it!=cellInfo.mdelCandidates.end();)
@@ -426,11 +422,13 @@ void Atom::multiplyCell(Point n)
                   atomList[index].setPos(pos);
                   atomList[index].setIndex(index);
                   atomList[index].clearNeighbours();
+                  newInfo.matoms.insert(atomList[index]);
                }
                else
                {
                   Atom newAtom(pos, index);
                   atomList.push_back(newAtom);
+                  newInfo.matoms.insert(atomList[index]);
                }
             }
          }
@@ -485,7 +483,7 @@ void Atom::outputAtoms(string fileName)
    
    file << fileName << endl << endl;
 
-   file << cellInfo.pnt() << " atoms" << endl;
+   file << cellInfo.nAtoms() << " atoms" << endl;
    file << cellInfo.nBonds() << " bonds" << endl;
    file << cellInfo.nAngles() << " angles" << endl;
    file << "0 dihedrals" << endl;
@@ -603,6 +601,7 @@ void Atom::atomOff()
       if (adjMatrix.get(i,j) != 0)
          adjMatrix.setSym(i,j,-1);
    }
+   cellInfo.matoms.erase(atomList[atomIndex]);
 }
 
 int Atom::getNumCoordX(int n)
@@ -650,10 +649,9 @@ int Atom::delPercentBond(double percent, unsigned int guideDel, double delDist)
    int numDelBonds = (int)(percent/100*cellInfo.nBonds());
    bool repeated = !(guideDel >= 3);
   
-   cout << "Deleting Bonds" << endl;
+   cout << "Deleting Bonds..." << endl;
    for (int i=0; i<numDelBonds;i++)
    {
-  debug(numDelBonds) 
       delRandBond(guideDel, delDist);
       if (cellInfo.nBondCandidates() == 0 && !repeated)
       {

@@ -29,7 +29,8 @@ class Parameters
       std::set<Bond> mbonds; //List of bonds
       std::set<Angle> mangles; //List of bonds
       std::set<Bond> moffCandidates; //List of bonds that can be deleted from
-      std::set<Atom> mdelCandidates; //List of atoms that are bonded to the system
+      std::set<Atom> mdelCandidates; //List of atoms that can be deleted from
+      std::set<Atom> matoms; //List of atoms bonded to the system
       void copy (const Parameters&);
 
    public:
@@ -45,12 +46,13 @@ class Parameters
       Point len () const {return mlen;}
       const std::set<Bond>& bonds () const {return mbonds;}
       const std::set<Angle>& angles () const {return mangles;}
-      const std::set<Atom>& atoms () const {return mdelCandidates;}
+      const std::set<Atom>& atoms () const {return matoms;}
       Point dim (int n) const {return mdim.getPoint(n);}
       const Matrix3& dim () const {return mdim;}
       double volume() const {return fabs( mdim.tripleProduct() );}
       int nBonds () const {return mbonds.size();}
       int nAngles () const {return mangles.size();}
+      int nAtoms () const {return matoms.size();}
       int nBondCandidates () const {return moffCandidates.size();}
       int nAtomCandidates () const {return mdelCandidates.size();}
       Point midpoint () const {return (dim(0)/2 + dim(1)/2 + dim(2)/2);}
