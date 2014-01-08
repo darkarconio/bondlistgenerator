@@ -117,7 +117,6 @@ void Atom::genAtomDelList()
    Atom candidate(*(cellInfo.mdelCandidates.begin()));
    for (set<Atom>::iterator it=cellInfo.mdelCandidates.begin(); it!=cellInfo.mdelCandidates.end();)
    {
-//      debug(!it->delCandidate())
       if (!it->delCandidate())
       {
          cellInfo.mdelCandidates.erase(*it++);
@@ -139,7 +138,6 @@ bool Atom::delRandBond(unsigned int guideDel, double delDist)
    bool success = false;
    for (set<Bond>::iterator it=cellInfo.moffCandidates.begin(); it!=cellInfo.moffCandidates.end();)
    {
-      debug(!it->offCandidate(guideDel, delDist))
       if (!it->offCandidate(guideDel, delDist))
       {
          cellInfo.moffCandidates.erase(*it++);
