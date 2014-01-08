@@ -483,7 +483,7 @@ void Atom::outputAtoms(string fileName)
    
    file << fileName << endl << endl;
 
-   file << cellInfo.nAtoms() << " atoms" << endl;
+   file << cellInfo.pnt() << " atoms" << endl;
    file << cellInfo.nBonds() << " bonds" << endl;
    file << cellInfo.nAngles() << " angles" << endl;
    file << "0 dihedrals" << endl;
@@ -504,17 +504,11 @@ void Atom::outputAtoms(string fileName)
 
    file << "Atoms" << endl << endl;
 
-   i = 0;
-   for (it3=cellInfo.atoms().begin();it3!=cellInfo.atoms().end();++it3)
-   {
-      file << ++i << " 1 1 " << it3->getPos().x() << ' ' << it3->getPos().y() << ' ' << it3->getPos().z() << endl;
-   }
-   
-/*   for (i=0;i<cellInfo.pnt();i++)
+   for (i=0;i<cellInfo.pnt();i++)
    {
       file << i+1 << " 1 1 " << atomList[i].getPos('x') << " " << atomList[i].getPos('y') << " " 
            << atomList[i].getPos('z') << endl;
-   }*/
+   }
    
    file << endl << "Bonds" << endl << endl;
    
