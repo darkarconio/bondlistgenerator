@@ -62,8 +62,6 @@ class Parameters
       void dist (double n) {mdist = n;}
       void setDim (Point pt, int n) {mdim.setPoint(pt,n); mlen.setCoord(pt.distance(), n);}
       void setDim (const Matrix3&);
-      void delRandBond (std::vector<Atom>&, int);
-      void genDelList (std::vector<Atom>&);
       
       void printCellDim() const;
       void writeBondLoc() const;
@@ -71,12 +69,8 @@ class Parameters
 
       Parameters& operator= (const Parameters& other) {copy(other); return *this;}
       
-      void strain (const Point&);
-      void strain (const Point&, const Point&);
-      void strain (const Matrix3&);
-      
       Point getRealDiff (Point&, Point&); //Returns the distance between atoms bonded across cell boundaries
       Point checkPeriodBound (Point&); //Shifts a point back into the cell if the optimization moves it outside
-      Point getRealAvg (Point&, Point&);
+      Point getRealAvg (Point&, Point&); //Returns the midpoint between atoms bonded across cell boundaries
 };
 #endif

@@ -78,36 +78,6 @@ Point Parameters::getRealAvg (Point & a, Point & b)
    Point avg = getRealDiff(a,b)/2 + b;
    return checkPeriodBound(avg);
 }
-   
-/****** Depricated ******
-void Parameters::delRandBond(vector<Atom> & atoms, int c)
-{
-   set<int>::iterator it = mdelCandidates.begin();
-   it += rand() % nCandidates();
-   int num = *it;
-   if (atoms[num].getNumNeigh() > 2) 
-   {
-      if (atoms[num].delRandNeighbour())
-      {
-         
-      }
-      else 
-      {
-         mdelCandidates.erase(num);
-         delRandBond(atoms, ++c);
-      }
-      genBondList(atoms);
-      if (mangles.size() != 0) genAngleList(atoms);
-   }
-   else 
-   {
-   //if (c > 5) debug(atoms[num].getNumNeigh());
-   if (c > 5) debug(num);
-      mdelCandidates.erase(num);
-   debug(c)
-      delRandBond(atoms, ++c);
-   }
-}*/
 
 Parameters::Parameters()
 {
@@ -160,34 +130,6 @@ void Parameters::writeAtomLoc() const
    {
       file << ++i << ' ' << it->getPos().x() << ' ' << it->getPos().y() << ' ' << it->getPos().z() << endl;
    }
-}
-
-void Parameters::strain(const Point & strain)
-{
-   Matrix3 strainTensor;
-   strainTensor.setDiag(strain);
-   mdim *= strainTensor; 
-   for (int i=0;i<3;i++)
-      mlen.setCoord(dim(i).distance(), i);
-}
-
-void Parameters::strain(const Point & strain, const Point& shear)
-{
-   Matrix3 strainTensor;
-   strainTensor.setDiag(strain);
-   strainTensor.setSym(1,2,shear.x());
-   strainTensor.setSym(0,2,shear.y());
-   strainTensor.setSym(0,1,shear.z());
-   mdim *= strainTensor; 
-   for (int i=0;i<3;i++)
-      mlen.setCoord(dim(i).distance(), i);
-}
-
-void Parameters::strain(const Matrix3& strainTensor)
-{
-   mdim *= strainTensor;
-   for (int i=0;i<3;i++)
-      mlen.setCoord(dim(i).distance(), i);
 }
 
 void Parameters::setDim (const Matrix3& other) 
