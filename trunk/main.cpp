@@ -90,7 +90,8 @@ int main (int argc, char* argv[])
    Atom::cellInfo.writeBondLoc();
    
    cout << "Average Coordination: " << 2*(double)Atom::cellInfo.nBonds()/(double)Atom::cellInfo.nAtoms() << endl;
-   cout << "Density: " << Atom::cellInfo.nAtoms()/Atom::cellInfo.volume() << endl;
+   cout << "Density: " << (double)Atom::cellInfo.nAtoms()/Atom::cellInfo.volume() << endl;
+   cout << "Bond Density: " << 2*(double)Atom::cellInfo.nBonds()/Atom::cellInfo.volume() << endl;
    cout << "Num Coord 2: " << Atom::getNumCoordX(2) << endl;
    cout << "Avg Coord 2 Neighbour Coord: " << Atom::getCoordXNeighBond(2) << endl;
    cout << "Num Coord 3: " << Atom::getNumCoordX(3) << endl;
